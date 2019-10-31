@@ -1,0 +1,157 @@
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>DraftScript</title>
+  <script src="lib/codemirror.js"></script>
+  <link rel="stylesheet" href="lib/codemirror.css">
+  <link rel="stylesheet" href="addon/hint/show-hint.css">
+  <script src="mode/javascript/javascript.js"></script>
+  <script src="addon/edit/matchbrackets.js"></script>
+  <script src="addon/hint/show-hint.js"></script>
+  <script src="addon/hint/javascript-hint.js"></script>
+  <script src="keymap/emacs.js"></script>
+
+  <script>
+    // Copyright (C) 2019 by Shigeru Chiba <chiba@acm.org>.
+    'use strict';
+
+    const DraftScript = new class {
+      constructor() {
+        this.editorArea = null;
+        this.consoleArea = null;
+        this.outputStr = '';
+        this.class_name = 'draftscript';
+      }
+
+      onload() {
+        const sample = `turtle.up()
+turtle.move(200, 200)
+turtle.down()
+turtle.forward(200)
+turtle.right(120)
+turtle.color(red)
+turtle.forward(200)
+turtle.right(120)
+turtle.speed(0.5)
+turtle.color(blue)
+turtle.forward(200)
+print(1 + 2)`
+
+        const editor = document.getElementById('editor');
+        this.editorArea = CodeMirror(editor, {
+          mode: 'javascript',
+          value: sample,
+          lineNumbers: true,
+          keyMap: 'emacs',
+          matchBrackets: true,
+          extraKeys: { 'Shift-Enter': function(cm){ DraftScript.run(); },
+                       'Ctrl-Space': 'autocomplete' },
+        });
+
+        const out = document.getElementById('console');
+        this.consoleArea = CodeMirror(out, {
+          readOnly: true,
+        });
+
+        this.resizeCanvas();
+        this.editorArea.setSize('100%', '400px');
+        this.consoleArea.setSize('100%', '10em');
+        this.editorArea.focus();
+      }
+
+      resizeCanvas() {
+        const editor = document.getElementById('editor');
+        let w = document.body.clientWidth - editor.clientWidth - 50;
+        if (w < 370)
+          w = 500;
+        else if (w < 400)
+          w = 400;
+
+        const c = document.getElementById('canvas');
+        c.width = w;
+        c.height = w;
+      }
+
+      run() {
+        try {
+          eval(this.editorArea.getDoc().getValue());
+        }
+        catch (e) {
+          DraftScript.turtleCmd.pushAlert('エラー：プログラムを実行できません\n' + e);
+        }
+        const ctx = document.getElementById('canvas').getContext('2d');
+        DraftScript.turtleCmd.runTurtle(ctx)
+      }
+
+      reset() {
+        this.outputStr = "";
+        this.consoleArea.getDoc().setValue(this.outputStr);
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      save() {
+        const program = this.editorArea.getDoc().getValue();
+        localStorage.setItem(this.class_name, JSON.stringify(program));
+      }
+
+      load() {
+        const program = localStorage.getItem(this.class_name);
+        if (program != null
+            && confirm('保存済みのプログラムを開きますか？\n' +
+                       '今編集中のプログラムは消去されます。')) {
+          this.editorArea.getDoc().setValue(JSON.parse(program));
+          this.editorArea.focus();
+        }
+      }
+
+      newProgram() {
+        if (confirm('今編集中のプログラムを消去しますか？')) {
+          this.editorArea.getDoc().setValue('')
+          this.editorArea.focus();
+        }
+      }
+
+      print(value) {
+        this.outputStr = this.outputStr + value + '\n';
+        this.consoleArea.getDoc().setValue(this.outputStr);
+        this.consoleArea.scrollIntoView(this.consoleArea.getDoc().lineCount() - 1, 0);
+      }
+    }
+
+    window.onload = function () { DraftScript.onload(); }
+  </script>
+  <script src="./turtle.js"></script>
+</head>
+
+<body onresize="DraftScript.resizeCanvas();">
+<input type="button" value="消去" onclick="DraftScript.reset()"/>
+<input type="button" value="実行" onclick="DraftScript.run()"/>
+&nbsp;
+<input type="button" value="保存" onclick="DraftScript.save()"/>
+<input type="button" value="読込" onclick="DraftScript.load()"/>
+<input type="button" value="新規" onclick="DraftScript.newProgram()"/>
+<br/>
+
+<div style="float: left;">
+ <div id="editor" style="width: 43em; border: 0.5px solid gray;"></div>
+ <br/>
+ <div id="console" style="width: 43em; border: 0.5px solid gray;"></div>
+ <br/>
+</div>
+
+<div style="float: left;">
+&nbsp;
+</div>
+
+<div>
+<canvas id="canvas" width=400 height=400
+        style="background-color: white; border: 0.5px solid gray;">
+</canvas>
+</div>
+
+<div style="clear: both;"></div>
+
+</body>
+</html>
