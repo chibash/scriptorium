@@ -219,7 +219,7 @@ DraftScript.TurtleCmd = class {
   drawTurtle(turtle, ctx) {
     const x = turtle.x
     const y = turtle.y
-    turtle.bgImage = ctx.getImageData(x - 15, y - 35, 40, 40)
+    turtle.bgImage = ctx.getImageData(x - 15, y - 35, 45, 40)
     ctx.font = "30px Arial"
     ctx.fillText('\u{1f422}', x - 10, y - 3)
   }
