@@ -217,8 +217,8 @@ DraftScript.TurtleCmd = class {
   }
 
   drawTurtle(turtle, ctx) {
-    const x = turtle.x
-    const y = turtle.y
+    const x = Math.round(turtle.x)
+    const y = Math.round(turtle.y)
     turtle.bgImage = ctx.getImageData(x - 15, y - 35, 50, 40)
     ctx.font = "30px Arial"
     ctx.fillText('\u{1f422}', x - 10, y - 3)
@@ -226,7 +226,7 @@ DraftScript.TurtleCmd = class {
 
   clearTurtle(turtle, ctx) {
     if (turtle.bgImage != null) {
-      ctx.putImageData(turtle.bgImage, turtle.x - 15, turtle.y - 35)
+      ctx.putImageData(turtle.bgImage, Math.round(turtle.x) - 15, Math.round(turtle.y) - 35)
       turtle.bgImage = null
     }
   }
