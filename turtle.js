@@ -17,6 +17,7 @@ DraftScript.Turtle = class {
   }
 
   initialize() {
+    this.image_char = '\u{1f422}'
     this.x = this.y = 100
     this.direction = 0
     this.velocity = 1
@@ -36,6 +37,10 @@ DraftScript.Turtle = class {
 
   color(c) {
     this.turtleCmd.push(new DraftScript.Color(this, c))
+  }
+
+  image(c) {
+    this.turtleCmd.push(new DraftScript.Image(this, c))
   }
 
   speed(s) {
@@ -79,6 +84,20 @@ DraftScript.Color = class {
 
   run(cmd, ctx) {
     ctx.strokeStyle = this.color
+    return true
+  }
+}
+
+DraftScript.Image = class {
+  constructor(turtle, character) {
+    this.turtle = turtle
+    // since character might not be a string
+    const str = character + ' '
+    this.character = str.substring(0, str.length - 1)
+  }
+
+  run(cmd, ctx) {
+    this.turtle.image_char = this.character
     return true
   }
 }
@@ -220,8 +239,8 @@ DraftScript.TurtleCmd = class {
     const x = Math.round(turtle.x)
     const y = Math.round(turtle.y)
     turtle.bgImage = ctx.getImageData(x - 15, y - 35, 50, 40)
-    ctx.font = "30px Arial"
-    ctx.fillText('\u{1f422}', x - 10, y - 3)
+    ctx.font = '30px Arial'
+    ctx.fillText(turtle.image_char, x - 10, y - 3)
   }
 
   clearTurtle(turtle, ctx) {
