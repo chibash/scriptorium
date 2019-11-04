@@ -25,7 +25,7 @@
 
       onload() {
         const sample = `turtle.up()
-turtle.move(150, 200)
+turtle.move(100, 50)
 turtle.down()
 turtle.forward(200)
 turtle.right(120)
@@ -34,8 +34,7 @@ turtle.forward(200)
 turtle.right(120)
 turtle.speed(0.5)
 turtle.color(blue)
-turtle.forward(200)
-print(1 + 2)`
+turtle.forward(200)`
 
         const editor = document.getElementById('editor');
         this.editorArea = CodeMirror(editor, {

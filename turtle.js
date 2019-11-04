@@ -123,8 +123,20 @@ DraftScript.Move = class {
   }
 
   run(cmd, ctx) {
-    cmd.drawLine(this.turtle, ctx, this.x, this.y)
-    return true
+    const turtle = this.turtle
+    const xlen = this.x - turtle.x
+    const ylen = this.y - turtle.y
+    const sum = xlen * xlen + ylen * ylen
+    if (turtle.velocity * turtle.velocity >= sum) {
+      cmd.drawLine(this.turtle, ctx, this.x, this.y)
+      return true
+    }
+
+    const speed = turtle.velocity / Math.sqrt(sum)
+    const x2 = turtle.x + xlen * speed
+    const y2 = turtle.y + ylen * speed
+    cmd.drawLine(this.turtle, ctx, x2, y2)
+    return false
   }
 }
 
