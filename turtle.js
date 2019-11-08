@@ -4,8 +4,12 @@ function print(value) {
   DraftScript.turtleCmd.push(new DraftScript.Print(value))
 }
 
-function* range(from, to) {
-  while (from <= to)
+function* range(from, to=null) {
+  if (to == null) {
+    to = from
+    from = 0
+  }
+  while (from < to)
     yield from++
 }
 
