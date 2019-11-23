@@ -48,22 +48,28 @@ DraftScript.Turtle = class {
   }
 
   speed(s) {
+    this.turtleCmd.assertNumber('speed()', s)
     this.turtleCmd.push(new DraftScript.Speed(this, s))
   }
 
   move(x, y) {
+    this.turtleCmd.assertNumber('move(x)', x)
+    this.turtleCmd.assertNumber('move(y)', y)
     this.turtleCmd.push(new DraftScript.Move(this, x, y))
   }
 
   forward(d) {
+    this.turtleCmd.assertNumber('forward()', d)
     this.turtleCmd.push(new DraftScript.Forward(this, d))
   }
 
   left(d) {
+    this.turtleCmd.assertNumber('left()', d)
     this.turtleCmd.push(new DraftScript.Left(this, d))
   }
 
   right(d) {
+    this.turtleCmd.assertNumber('right()', d)
     this.turtleCmd.push(new DraftScript.Right(this, d))
   }
 }
@@ -227,6 +233,11 @@ DraftScript.TurtleCmd = class {
 
   push(cmd) {
     this.commands.push(cmd)
+  }
+
+  assertNumber(msg, x) {
+    if (typeof x != 'number')
+      throw 'the argument to ' + msg + ' is not a number.'
   }
 
   pushAlert(msg) {
