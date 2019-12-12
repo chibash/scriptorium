@@ -13,6 +13,8 @@ function* range(from, to=null) {
     yield from++
 }
 
+// the following code depends on draftscript.js
+
 DraftScript.Turtle = class {
   constructor(cmd) {
     this.turtleCmd = cmd
