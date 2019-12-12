@@ -18,13 +18,13 @@
     const DraftScript = new class {
       constructor() {
         this.editorArea = null;
-        this.consoleArea = null;
-        this.outputStr = '';
         this.class_name = 'draftscript';
+        this.consoleText = '';
       }
 
       onload() {
         const sample = `turtle.up()
+turtle.speed(100)
 turtle.move(100, 50)
 turtle.down()
 turtle.forward(200)
@@ -32,7 +32,7 @@ turtle.right(120)
 turtle.color(red)
 turtle.forward(200)
 turtle.right(120)
-turtle.speed(0.5)
+// turtle.speed(0.5)
 turtle.color(blue)
 turtle.forward(200)`
 
@@ -47,14 +47,8 @@ turtle.forward(200)`
                        'Ctrl-Space': 'autocomplete' },
         });
 
-        const out = document.getElementById('console');
-        this.consoleArea = CodeMirror(out, {
-          readOnly: true,
-        });
-
         this.resizeCanvas();
         this.editorArea.setSize('100%', '400px');
-        this.consoleArea.setSize('100%', '10em');
         this.editorArea.focus();
       }
 
@@ -72,27 +66,65 @@ turtle.forward(200)`
       }
 
       run() {
+        const src = this.editorArea.getDoc().getValue();
+        let success = true
+        let result = null
         try {
-          eval(this.editorArea.getDoc().getValue());
+          result = eval(src);
         }
         catch (e) {
+          success = false
+          result = e
           DraftScript.turtleCmd.pushAlert('エラー：プログラムを実行できません\n' + e);
         }
+        DraftScript.turtleCmd.pushEnd(src, success, result)
+        this.consoleText = ''
         const ctx = document.getElementById('canvas').getContext('2d');
         DraftScript.turtleCmd.runTurtle(ctx)
+        this.editorArea.focus();
+      }
+
+
+      print(value) {
+        const value2 = this.escapeHTML(value) + '<br/>';
+        this.consoleText += value2;
+        const out = document.getElementById('output');
+        out.innerText += value + '\n';
+      }
+
+      end_running(src, success, result) {
+        const cells = document.getElementById('cells');
+        cells.innerHTML += "<pre style='padding: 5px; width: 50em; border: 0.5px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
+        cells.innerHTML += this.consoleText;
+        if (result)
+          cells.innerHTML += this.escapeHTML(result)
+
+        cells.innerHTML += '</p>'
+        if (success)
+          this.editorArea.getDoc().setValue('')
+
+        const out = document.getElementById('output');
+        out.innerText = ''
+        this.editorArea.focus();
+        document.getElementById('canvas').scrollIntoView(false);
       }
 
       reset() {
-        this.outputStr = "";
-        this.consoleArea.getDoc().setValue(this.outputStr);
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        DraftScript.turtleCmd.reset();
+        this.editorArea.focus();
       }
 
       save() {
         const program = this.editorArea.getDoc().getValue();
-        localStorage.setItem(this.class_name, JSON.stringify(program));
+        if (program != null
+            && confirm('今編集中のプログラムを保存しますか？\n' +
+                       '以前保存したプログラムは消去されます。')) {
+          localStorage.setItem(this.class_name, JSON.stringify(program));
+          this.editorArea.focus();
+        }
       }
 
       load() {
@@ -104,18 +136,24 @@ turtle.forward(200)`
           this.editorArea.focus();
         }
       }
-
-      newProgram() {
-        if (confirm('今編集中のプログラムを消去しますか？')) {
-          this.editorArea.getDoc().setValue('')
-          this.editorArea.focus();
+    
+      escapeHTML(str) {
+        let out = '';
+        for (const c of str + '') {
+          if(c === '<')
+            out += '&lt;';
+          else if(c === '>')
+            out += '&gt;';
+          else if(c === "'")
+            out += '&#39;';
+          else if(c === '"')
+            out += '&quot;';
+          else if(c === '&')
+            out += '&amp;';
+          else
+            out += c;
         }
-      }
-
-      print(value) {
-        this.outputStr = this.outputStr + value + '\n';
-        this.consoleArea.getDoc().setValue(this.outputStr);
-        this.consoleArea.scrollIntoView(this.consoleArea.getDoc().lineCount() - 1, 0);
+        return out;
       }
     }
 
@@ -125,32 +163,36 @@ turtle.forward(200)`
 </head>
 
 <body onresize="DraftScript.resizeCanvas();">
+
+<div id="cells" style="font-family: monospace; margin-left: 30px;">
+</div>
+
+<div>
+<br/>
 <input type="button" value="消去" onclick="DraftScript.reset()"/>
 <input type="button" value="実行" onclick="DraftScript.run()"/>
 &nbsp;
 <input type="button" value="保存" onclick="DraftScript.save()"/>
 <input type="button" value="読込" onclick="DraftScript.load()"/>
-<input type="button" value="新規" onclick="DraftScript.newProgram()"/>
 <br/>
 
 <div style="float: left;">
  <div id="editor" style="width: 43em; border: 0.5px solid gray;"></div>
  <br/>
- <div id="console" style="width: 43em; border: 0.5px solid gray;"></div>
- <br/>
+ <div id="output" style="font-family: monospace; margin-left: 30px;">
+</div>
 </div>
 
 <div style="float: left;">
 &nbsp;
 </div>
 
-<div>
 <canvas id="canvas" width=400 height=400
         style="background-color: white; border: 0.5px solid gray;">
 </canvas>
-</div>
 
 <div style="clear: both;"></div>
+</div>
 
 </body>
 </html>
