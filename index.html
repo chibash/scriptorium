@@ -23,18 +23,7 @@
       }
 
       onload() {
-        const sample = `turtle.up()
-turtle.speed(100)
-turtle.move(100, 50)
-turtle.down()
-turtle.forward(200)
-turtle.right(120)
-turtle.color(red)
-turtle.forward(200)
-turtle.right(120)
-// turtle.speed(0.5)
-turtle.color(blue)
-turtle.forward(200)`
+        const sample = '';
 
         const editor = document.getElementById('editor');
         this.editorArea = CodeMirror(editor, {
@@ -67,7 +56,10 @@ turtle.forward(200)`
 
       run() {
         const src = this.editorArea.getDoc().getValue();
-        let success = true
+        if (src === '')
+          return;
+
+          let success = true
         let result = null
         try {
           result = eval(src);
@@ -96,7 +88,7 @@ turtle.forward(200)`
         const cells = document.getElementById('cells');
         cells.innerHTML += "<pre style='padding: 5px; width: 50em; border: 0.5px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
         cells.innerHTML += this.consoleText;
-        if (result)
+        if (result !== undefined)
           cells.innerHTML += this.escapeHTML(result)
 
         cells.innerHTML += '</p>'
@@ -192,7 +184,6 @@ turtle.forward(200)`
 </canvas>
 
 <div style="clear: both;"></div>
-</div>
 
 </body>
 </html>

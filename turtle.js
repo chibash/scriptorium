@@ -238,6 +238,7 @@ DraftScript.TurtleCmd = class {
   constructor() {
     this.commands = []
     this.turtles = []
+    this.useTurtle = false
     this.running = false
   }
 
@@ -246,6 +247,13 @@ DraftScript.TurtleCmd = class {
   }
 
   push(cmd) {
+    if (cmd instanceof DraftScript.Alert
+        || cmd instanceof DraftScript.End
+        || cmd instanceof DraftScript.Print)
+      ; // do nothing
+    else
+      this.useTurtle = true
+
     this.commands.push(cmd)
   }
 
@@ -304,9 +312,10 @@ DraftScript.TurtleCmd = class {
       return
     }
 
-    for (const t of this.turtles)
-      if (turtle.bgImage == null)
-        this.drawTurtle(t, ctx)
+    if (this.useTurtle)
+      for (const t of this.turtles)
+        if (turtle.bgImage == null)
+          this.drawTurtle(t, ctx)
 
     let index = 0
     let cmd = this.commands[index++]
