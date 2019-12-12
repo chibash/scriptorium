@@ -28,6 +28,7 @@ DraftScript.Turtle = class {
     this.x_velocity = this.velocity
     this.y_velocity = 0.0
     this.penDown = true
+    this.penColor = '#000000'  // black
     this.bgImage = null
   }
 
@@ -93,7 +94,7 @@ DraftScript.Color = class {
   }
 
   run(cmd, ctx) {
-    ctx.strokeStyle = this.color
+    this.turtle.penColor = this.color
     return true
   }
 }
@@ -220,6 +221,19 @@ DraftScript.Alert = class {
   }
 }
 
+DraftScript.End = class {
+  constructor(src, success, result) {
+    this.source = src
+    this.success = success
+    this.result = result
+  }
+
+  run(cmd, ctx) {
+    DraftScript.end_running(this.source, this.success, this.result)
+    return true
+  }
+}
+
 DraftScript.TurtleCmd = class {
   constructor() {
     this.commands = []
@@ -241,7 +255,11 @@ DraftScript.TurtleCmd = class {
   }
 
   pushAlert(msg) {
-      this.push(new DraftScript.Alert(msg))
+    this.push(new DraftScript.Alert(msg))
+  }
+
+  pushEnd(src, success, result) {
+    this.push(new DraftScript.End(src, success, result))
   }
 
   updateVelocity(turtle) {
@@ -252,6 +270,7 @@ DraftScript.TurtleCmd = class {
   drawLine(turtle, ctx, x, y) {
     this.clearTurtle(turtle, ctx)
     if (turtle.penDown) {
+      ctx.strokeStyle = turtle.penColor
       ctx.beginPath()
       ctx.moveTo(turtle.x, turtle.y)
       ctx.lineTo(x, y)
@@ -285,9 +304,9 @@ DraftScript.TurtleCmd = class {
       return
     }
 
-    ctx.strokeStyle = '#000000'  // black
     for (const t of this.turtles)
-      this.drawTurtle(t, ctx)
+      if (turtle.bgImage == null)
+        this.drawTurtle(t, ctx)
 
     let index = 0
     let cmd = this.commands[index++]
@@ -299,13 +318,10 @@ DraftScript.TurtleCmd = class {
         }
         else {
           // finish the execution
-          for (const t of this.turtles) {
-            this.clearTurtle(t, ctx)
-            t.initialize()
-          }
-
           this.commands = []
           this.running = false
+          // for (const t of this.turtles)
+          //  this.clearTurtle(t, ctx)
         }
       }
       else
@@ -313,6 +329,11 @@ DraftScript.TurtleCmd = class {
     }
     window.requestAnimationFrame(callback)
     this.running = true
+  }
+
+  reset() {
+    for (const t of this.turtles)
+      t.initialize()
   }
 }
 
