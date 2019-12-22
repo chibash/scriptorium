@@ -2,7 +2,7 @@
 
 'use strict';
 
-const DraftScript = new class {
+const Scriptorium = new class {
   constructor() {
     // HTML elements' ID
     this.cells_id = 'cells'
@@ -12,7 +12,7 @@ const DraftScript = new class {
 
     this.editorArea = null;
     this.consoleText = '';
-    this.class_name = 'draftscript';
+    this.class_name = 'scriptorium';
   }
 
   onload() {
@@ -25,7 +25,7 @@ const DraftScript = new class {
       lineNumbers: true,
       keyMap: 'emacs',
       matchBrackets: true,
-      extraKeys: { 'Shift-Enter': function(cm){ DraftScript.run(); },
+      extraKeys: { 'Shift-Enter': function(cm){ Scriptorium.run(); },
                    'Ctrl-Space': 'autocomplete' },
     });
 
@@ -61,12 +61,12 @@ const DraftScript = new class {
     catch (e) {
       success = false
       result = e
-      DraftScript.turtleCmd.pushAlert('エラー：プログラムを実行できません\n' + e);
+      Scriptorium.turtleCmd.pushAlert('エラー：プログラムを実行できません\n' + e);
     }
-    DraftScript.turtleCmd.pushEnd(src, success, result)
+    Scriptorium.turtleCmd.pushEnd(src, success, result)
     this.consoleText = ''
     const ctx = document.getElementById(this.canvas_id).getContext('2d');
-    DraftScript.turtleCmd.runTurtle(ctx)
+    Scriptorium.turtleCmd.runTurtle(ctx)
     this.editorArea.focus();
   }
 
@@ -100,7 +100,7 @@ const DraftScript = new class {
     const canvas = document.getElementById(this.canvas_id);
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    DraftScript.turtleCmd.reset();
+    Scriptorium.turtleCmd.reset();
     this.editorArea.focus();
   }
 
@@ -144,4 +144,4 @@ const DraftScript = new class {
   }
 }
 
-window.onload = function () { DraftScript.onload(); }
+window.onload = function () { Scriptorium.onload(); }

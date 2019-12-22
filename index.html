@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <title>DraftScript</title>
+  <title>Scriptorium</title>
   <script src="lib/codemirror.js"></script>
   <link rel="stylesheet" href="lib/codemirror.css">
   <link rel="stylesheet" href="addon/hint/show-hint.css">
@@ -11,22 +11,22 @@
   <script src="addon/hint/javascript-hint.js"></script>
   <script src="keymap/emacs.js"></script>
 
-  <script src="./draftscript.js"></script>
+  <script src="./scriptorium.js"></script>
   <script src="./turtle.js"></script>
 </head>
 
-<body onresize="DraftScript.resizeCanvas();">
+<body onresize="Scriptorium.resizeCanvas();">
 
 <div id="cells" style="font-family: monospace; margin-left: 30px;">
 </div>
 
 <div>
 <br/>
-<input type="button" value="消去" onclick="DraftScript.reset()"/>
-<input type="button" value="実行" onclick="DraftScript.run()"/>
+<input type="button" value="消去" onclick="Scriptorium.reset()"/>
+<input type="button" value="実行" onclick="Scriptorium.run()"/>
 &nbsp;
-<input type="button" value="保存" onclick="DraftScript.save()"/>
-<input type="button" value="読込" onclick="DraftScript.load()"/>
+<input type="button" value="保存" onclick="Scriptorium.save()"/>
+<input type="button" value="読込" onclick="Scriptorium.load()"/>
 <br/>
 
 <div style="float: left;">

@@ -1,7 +1,7 @@
 // Copyright (C) 2019 by Shigeru Chiba <chiba@acm.org>.
 
 function print(value) {
-  DraftScript.turtleCmd.push(new DraftScript.Print(value))
+  Scriptorium.turtleCmd.push(new Scriptorium.Print(value))
 }
 
 function* range(from, to=null) {
@@ -13,9 +13,9 @@ function* range(from, to=null) {
     yield from++
 }
 
-// the following code depends on draftscript.js
+// the following code depends on scriptorium.js
 
-DraftScript.Turtle = class {
+Scriptorium.Turtle = class {
   constructor(cmd) {
     this.turtleCmd = cmd
     this.initialize()
@@ -35,49 +35,49 @@ DraftScript.Turtle = class {
   }
 
   down() {
-    this.turtleCmd.push(new DraftScript.PenDown(this, true))
+    this.turtleCmd.push(new Scriptorium.PenDown(this, true))
   }
 
   up() {
-    this.turtleCmd.push(new DraftScript.PenDown(this, false))
+    this.turtleCmd.push(new Scriptorium.PenDown(this, false))
   }
 
   color(c) {
-    this.turtleCmd.push(new DraftScript.Color(this, c))
+    this.turtleCmd.push(new Scriptorium.Color(this, c))
   }
 
   image(c) {
-    this.turtleCmd.push(new DraftScript.Image(this, c))
+    this.turtleCmd.push(new Scriptorium.Image(this, c))
   }
 
   speed(s) {
     this.turtleCmd.assertNumber('speed()', s)
-    this.turtleCmd.push(new DraftScript.Speed(this, s))
+    this.turtleCmd.push(new Scriptorium.Speed(this, s))
   }
 
   move(x, y) {
     this.turtleCmd.assertNumber('move(x)', x)
     this.turtleCmd.assertNumber('move(y)', y)
-    this.turtleCmd.push(new DraftScript.Move(this, x, y))
+    this.turtleCmd.push(new Scriptorium.Move(this, x, y))
   }
 
   forward(d) {
     this.turtleCmd.assertNumber('forward()', d)
-    this.turtleCmd.push(new DraftScript.Forward(this, d))
+    this.turtleCmd.push(new Scriptorium.Forward(this, d))
   }
 
   left(d) {
     this.turtleCmd.assertNumber('left()', d)
-    this.turtleCmd.push(new DraftScript.Left(this, d))
+    this.turtleCmd.push(new Scriptorium.Left(this, d))
   }
 
   right(d) {
     this.turtleCmd.assertNumber('right()', d)
-    this.turtleCmd.push(new DraftScript.Right(this, d))
+    this.turtleCmd.push(new Scriptorium.Right(this, d))
   }
 }
 
-DraftScript.PenDown = class {
+Scriptorium.PenDown = class {
   constructor(turtle, down) {
     this.turtle = turtle
     this.down = down
@@ -89,7 +89,7 @@ DraftScript.PenDown = class {
   }
 }
 
-DraftScript.Color = class {
+Scriptorium.Color = class {
   constructor(turtle, color) {
     this.turtle = turtle
     this.color = color
@@ -101,7 +101,7 @@ DraftScript.Color = class {
   }
 }
 
-DraftScript.Image = class {
+Scriptorium.Image = class {
   constructor(turtle, character) {
     this.turtle = turtle
     // since character might not be a string
@@ -115,7 +115,7 @@ DraftScript.Image = class {
   }
 }
 
-DraftScript.Speed = class {
+Scriptorium.Speed = class {
   constructor(turtle, speed) {
     this.turtle = turtle
     this.speed = Math.max(speed, 0.1)
@@ -128,7 +128,7 @@ DraftScript.Speed = class {
   }
 }
 
-DraftScript.Move = class {
+Scriptorium.Move = class {
   constructor(turtle, x, y) {
     this.turtle = turtle
     this.x = x
@@ -153,7 +153,7 @@ DraftScript.Move = class {
   }
 }
 
-DraftScript.Forward = class {
+Scriptorium.Forward = class {
   constructor(turtle, distance) {
     this.turtle = turtle
     this.distance = distance
@@ -176,7 +176,7 @@ DraftScript.Forward = class {
   }
 }
 
-DraftScript.Left = class {
+Scriptorium.Left = class {
   constructor(turtle, degree) {
     this.turtle = turtle
     this.direction = degree
@@ -188,7 +188,7 @@ DraftScript.Left = class {
   }
 }
 
-DraftScript.Right = class {
+Scriptorium.Right = class {
   constructor(turtle, degree) {
     this.turtle = turtle
     this.degree = degree
@@ -201,18 +201,18 @@ DraftScript.Right = class {
   }
 }
 
-DraftScript.Print = class {
+Scriptorium.Print = class {
   constructor(value) {
     this.message = value
   }
 
   run(cmd, ctx) {
-    DraftScript.print(this.message)
+    Scriptorium.print(this.message)
     return true
   }
 }
 
-DraftScript.Alert = class {
+Scriptorium.Alert = class {
   constructor(msg) {
     this.message = msg
   }
@@ -223,7 +223,7 @@ DraftScript.Alert = class {
   }
 }
 
-DraftScript.End = class {
+Scriptorium.End = class {
   constructor(src, success, result) {
     this.source = src
     this.success = success
@@ -231,12 +231,12 @@ DraftScript.End = class {
   }
 
   run(cmd, ctx) {
-    DraftScript.end_running(this.source, this.success, this.result)
+    Scriptorium.end_running(this.source, this.success, this.result)
     return true
   }
 }
 
-DraftScript.TurtleCmd = class {
+Scriptorium.TurtleCmd = class {
   constructor() {
     this.commands = []
     this.turtles = []
@@ -249,9 +249,9 @@ DraftScript.TurtleCmd = class {
   }
 
   push(cmd) {
-    if (cmd instanceof DraftScript.Alert
-        || cmd instanceof DraftScript.End
-        || cmd instanceof DraftScript.Print)
+    if (cmd instanceof Scriptorium.Alert
+        || cmd instanceof Scriptorium.End
+        || cmd instanceof Scriptorium.Print)
       ; // do nothing
     else
       this.useTurtle = true
@@ -265,11 +265,11 @@ DraftScript.TurtleCmd = class {
   }
 
   pushAlert(msg) {
-    this.push(new DraftScript.Alert(msg))
+    this.push(new Scriptorium.Alert(msg))
   }
 
   pushEnd(src, success, result) {
-    this.push(new DraftScript.End(src, success, result))
+    this.push(new Scriptorium.End(src, success, result))
   }
 
   updateVelocity(turtle) {
@@ -348,8 +348,8 @@ DraftScript.TurtleCmd = class {
   }
 }
 
-DraftScript.turtleCmd = new DraftScript.TurtleCmd()
-const turtle = new DraftScript.Turtle(DraftScript.turtleCmd)
+Scriptorium.turtleCmd = new Scriptorium.TurtleCmd()
+const turtle = new Scriptorium.Turtle(Scriptorium.turtleCmd)
 const red = '#ff0000'
 const green = '#00cc00'
 const blue = '#0066ff'
