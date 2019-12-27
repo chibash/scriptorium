@@ -65,8 +65,9 @@ const Scriptorium = new class {
     }
     Scriptorium.turtleCmd.pushEnd(src, success, result)
     this.consoleText = ''
-    const ctx = document.getElementById(this.canvas_id).getContext('2d');
-    Scriptorium.turtleCmd.runTurtle(ctx)
+    const canvas = document.getElementById(this.canvas_id)
+    const ctx = canvas.getContext('2d');
+    Scriptorium.turtleCmd.runTurtle(canvas, ctx)
     this.editorArea.focus();
   }
 
@@ -87,8 +88,11 @@ const Scriptorium = new class {
       cells.innerHTML += this.escapeHTML(result)
 
     cells.innerHTML += '</p>'
-    if (success)
-      this.editorArea.getDoc().setValue('')
+    if (success) {
+      const editor = this.editorArea
+      if (editor.getDoc().getValue() == src)
+        CodeMirror.emacs.kill(editor, { line: 0, ch: 0 }, {line: editor.lineCount(), ch: 0 }, true);
+    }
 
     const out = document.getElementById(this.output_id);
     out.innerText = ''

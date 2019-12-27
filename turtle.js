@@ -306,7 +306,7 @@ Scriptorium.TurtleCmd = class {
     }
   }
 
-  runTurtle(ctx) {
+  runTurtle(canvas, ctx) {
     if (this.commands.length < 1)
       return
     if (this.running) {
@@ -315,9 +315,21 @@ Scriptorium.TurtleCmd = class {
     }
 
     if (this.useTurtle)
-      for (const t of this.turtles)
-        if (turtle.bgImage == null)
-          this.drawTurtle(t, ctx)
+      for (const t of this.turtles) {
+        this.clearTurtle(t, ctx)
+        /* if the turtle is out of the pane, move it back. */
+        if (t.x < 0)
+          t.x = canvas.width - 10
+        else if (canvas.width < t.x)
+          t.x = 10
+
+        if (t.y < 0)
+          t.y = canvas.height - 10
+        else if (canvas.height < t.y)
+          t.y = 10
+
+        this.drawTurtle(t, ctx)
+      }
 
     let index = 0
     let cmd = this.commands[index++]
