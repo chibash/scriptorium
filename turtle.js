@@ -1,19 +1,10 @@
-// Copyright (C) 2019 by Shigeru Chiba <chiba@acm.org>.
+// Copyright (C) 2019 by Shigeru Chiba.
+
+// the following code depends on scriptorium.js
 
 function print(value) {
   Scriptorium.turtleCmd.push(new Scriptorium.Print(value))
 }
-
-function* range(from, to=null) {
-  if (to == null) {
-    to = from
-    from = 0
-  }
-  while (from < to)
-    yield from++
-}
-
-// the following code depends on scriptorium.js
 
 Scriptorium.Turtle = class {
   constructor(cmd) {

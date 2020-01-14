@@ -1,6 +1,15 @@
-// Copyright (C) 2019 by Shigeru Chiba <chiba@acm.org>.
+// Copyright (C) 2019 by Shigeru Chiba.
 
 'use strict';
+
+function* range(from, to=null) {
+  if (to == null) {
+    to = from
+    from = 0
+  }
+  while (from < to)
+    yield from++
+}
 
 const Scriptorium = new class {
   constructor() {
@@ -27,6 +36,9 @@ const Scriptorium = new class {
       matchBrackets: true,
       extraKeys: { 'Shift-Enter': function(cm){ Scriptorium.run(); },
                    'Ctrl-Space': 'autocomplete' },
+      gutters: ["CodeMirror-lint-markers"],
+      lint: { asi: true,
+              esversion: 10 },
     });
 
     this.resizeCanvas();
@@ -82,7 +94,7 @@ const Scriptorium = new class {
   // callback from turtle.js
   end_running(src, success, result) {
     const cells = document.getElementById(this.cells_id);
-    cells.innerHTML += "<pre style='padding: 5px; width: 50em; border: 0.5px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
+    cells.innerHTML += "<pre style='padding: 5px; width: 49em; border: 0.5px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
     cells.innerHTML += this.consoleText;
     if (result !== undefined)
       cells.innerHTML += this.escapeHTML(result)

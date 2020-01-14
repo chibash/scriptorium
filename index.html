@@ -5,11 +5,15 @@
   <script src="lib/codemirror.js"></script>
   <link rel="stylesheet" href="lib/codemirror.css">
   <link rel="stylesheet" href="addon/hint/show-hint.css">
+  <link rel="stylesheet" href="addon/lint/lint.css">
   <script src="mode/javascript/javascript.js"></script>
   <script src="addon/edit/matchbrackets.js"></script>
   <script src="addon/hint/show-hint.js"></script>
   <script src="addon/hint/javascript-hint.js"></script>
   <script src="keymap/emacs.js"></script>
+  <script src="./jshint.js"></script>
+  <script src="addon/lint/lint.js"></script>
+  <script src="addon/lint/javascript-lint.js"></script>
 
   <script src="./scriptorium.js"></script>
   <script src="./turtle.js"></script>
@@ -17,7 +21,7 @@
 
 <body onresize="Scriptorium.resizeCanvas();">
 
-<div id="cells" style="font-family: monospace; margin-left: 30px;">
+<div id="cells" style="font-family: monospace; margin-left: 45px;">
 </div>
 
 <div>
@@ -45,6 +49,8 @@
 </canvas>
 
 <div style="clear: both;"></div>
+
+<p style="font-family: monospace;">Scriptorium</p>
 
 </body>
 </html>
