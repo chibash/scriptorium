@@ -35,7 +35,7 @@ const Scriptorium = new class {
       keyMap: 'emacs',
       matchBrackets: true,
       extraKeys: { 'Shift-Enter': function(cm){ Scriptorium.run(); },
-                   'Ctrl-Space': 'autocomplete' },
+                   'Tab': 'autocomplete' },
       gutters: ["CodeMirror-lint-markers"],
       lint: { asi: true,
               esversion: 10 },

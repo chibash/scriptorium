@@ -352,9 +352,16 @@ Scriptorium.TurtleCmd = class {
 }
 
 Scriptorium.turtleCmd = new Scriptorium.TurtleCmd()
-const turtle = new Scriptorium.Turtle(Scriptorium.turtleCmd)
-const red = '#ff0000'
-const green = '#00cc00'
-const blue = '#0066ff'
-const white = '#ffffff'
-const black = '#000000'
+
+// declare read-only global propoerties i.e. global constants.
+for (const prop of
+     [['turtle', new Scriptorium.Turtle(Scriptorium.turtleCmd)],
+      ['red', '#ff0000'],
+      ['green', '#00cc00'],
+      ['blue', '#0066ff'],
+      ['white', '#ffffff'],
+      ['black', '#000000'] ]) {
+    Object.defineProperty(this, prop[0], {
+        value: prop[1],
+        writable: false })
+}
