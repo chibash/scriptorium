@@ -348,6 +348,8 @@ Scriptorium.TurtleCmd = class {
   reset() {
     for (const t of this.turtles)
       t.initialize()
+
+    this.useTurtle = false
   }
 }
 
