@@ -49,14 +49,15 @@ const Scriptorium = new class {
   resizeCanvas() {
     const editor = document.getElementById(this.editor_id);
     let w = document.body.clientWidth - editor.clientWidth - 50;
-    if (w < 370)
-      w = 500;
-    else if (w < 400)
-      w = 400;
+    if (w < 400)
+      w = 690;
 
     const c = document.getElementById(this.canvas_id);
+    const ctx = c.getContext('2d');
+    const img = ctx.getImageData(0, 0, w, w);
     c.width = w;
     c.height = w;
+    ctx.putImageData(img, 0, 0);
   }
 
   run() {
