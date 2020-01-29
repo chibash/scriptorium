@@ -18,6 +18,7 @@ const Scriptorium = new class {
     this.editor_id = 'editor'
     this.output_id = 'output'
     this.canvas_id = 'canvas'
+    this.bottom_id = 'bottom'
 
     this.editorArea = null;
     this.consoleText = '';
@@ -49,6 +50,10 @@ const Scriptorium = new class {
   resizeCanvas() {
     const editor = document.getElementById(this.editor_id);
     let w = document.body.clientWidth - editor.clientWidth - 50;
+    let h = document.body.clientHeight - 50;
+    if (h < w)
+      w = h;
+
     if (w < 400)
       w = 690;
 
@@ -95,7 +100,7 @@ const Scriptorium = new class {
   // callback from turtle.js
   end_running(src, success, result) {
     const cells = document.getElementById(this.cells_id);
-    cells.innerHTML += "<pre style='padding: 5px; width: 49em; border: 0.5px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
+    cells.innerHTML += "<pre style='padding: 5px; width: 49em; border: .7px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
     cells.innerHTML += this.consoleText;
     if (result !== undefined)
       cells.innerHTML += this.escapeHTML(result)
@@ -110,7 +115,7 @@ const Scriptorium = new class {
     const out = document.getElementById(this.output_id);
     out.innerText = ''
     this.editorArea.focus();
-    document.getElementById(this.canvas_id).scrollIntoView(false);
+    document.getElementById(this.bottom_id).scrollIntoView(false);
   }
 
   reset() {
