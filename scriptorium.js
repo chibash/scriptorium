@@ -23,6 +23,8 @@ const Scriptorium = new class {
     this.editorArea = null;
     this.consoleText = '';
     this.class_name = 'scriptorium';
+
+    this.notPC = /iP(hone|(o|a)d)|Android/.test(navigator.userAgent)
   }
 
   onload() {
@@ -114,8 +116,10 @@ const Scriptorium = new class {
 
     const out = document.getElementById(this.output_id);
     out.innerText = ''
-    this.editorArea.focus();
-    document.getElementById(this.bottom_id).scrollIntoView(false);
+    if (!this.notPC) {
+      this.editorArea.focus();
+      document.getElementById(this.bottom_id).scrollIntoView(false);
+    }
   }
 
   reset() {
