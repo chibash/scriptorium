@@ -24,7 +24,7 @@ const Scriptorium = new class {
     this.consoleText = '';
     this.class_name = 'scriptorium';
 
-    this.notPC = /iP(hone|(o|a)d)|Android/.test(navigator.userAgent)
+    this.isPC = !('ontouchend' in document)
   }
 
   onload() {
@@ -88,7 +88,8 @@ const Scriptorium = new class {
     const canvas = document.getElementById(this.canvas_id)
     const ctx = canvas.getContext('2d');
     Scriptorium.turtleCmd.runTurtle(canvas, ctx)
-    this.editorArea.focus();
+    if (this.isPC)
+      this.editorArea.focus();
   }
 
   // callback from turtle.js
@@ -116,9 +117,9 @@ const Scriptorium = new class {
 
     const out = document.getElementById(this.output_id);
     out.innerText = ''
-    if (!this.notPC) {
+    if (this.isPC) {
       this.editorArea.focus();
-      document.getElementById(this.bottom_id).scrollIntoView(false);
+        document.getElementById(this.bottom_id).scrollIntoView(false);
     }
   }
 
