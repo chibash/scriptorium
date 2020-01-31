@@ -31,7 +31,6 @@
   <div id="cells" style="font-family: monospace; margin-left: 45px;">
   </div>
 
-  <div>
   <br/>
   <input type="button" value="消去" onclick="Scriptorium.reset()"/>
   <input type="button" value="実行" onclick="Scriptorium.run()"/>
@@ -42,9 +41,11 @@
 
   <div style="float: left;">
    <div id="editor" style="width: 43em; border: .7px solid gray;"></div>
+   <a href="#" class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
+   <a href="#" class="btn-smallscreen" onclick="Scriptorium.run()">実行</a>
    <br/>
-   <div id="output" style="font-family: monospace; margin-left: 30px;">
-  </div>
+   <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
+   </div>
   </div>
 
   <div style="float: left;">
