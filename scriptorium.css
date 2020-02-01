@@ -16,8 +16,39 @@ h2#logo {
     padding-top: 18px;
 }
 
+div#cells {
+    font-size: 16px;
+    font-family: monospace;
+    margin-left: 45px;
+}
+
+.codebox {
+    padding: 5px;
+    width: 39.5em;
+    border: .7px solid gray;
+}
+
 a.btn-smallscreen {
     display: none;
+}
+
+input[type="button"] {
+    font-size: 16px;
+}
+
+div#editor {
+    width: 43em;
+    border: .7px solid gray;
+}
+
+.CodeMirror {
+    font-family: 'Courier', monospace;
+    font-size: 16px;
+}
+
+canvas#canvas {
+    background-color: white;
+    border: .7px solid gray;
 }
 
 @media screen and (max-width: 900px) {
@@ -30,22 +61,36 @@ a.btn-smallscreen {
         padding-top: 36px;
     }
 
+    .codebox {
+        border: 2px solid gray;
+    }
+
+    input[type="button"] {
+        display: none;
+    }
+
+    div#editor {
+        border: 2px solid gray;
+    }
+
     a.btn-smallscreen {
         display: inline-block;
-        width: 5em;
+        width: 3.2em;
         margin: 10px 0 10px 10px;
         padding: 0.3em 1em;
         text-decoration: none;
         text-align:center;
         font-family: sans-serif;
-        font-size: 40px;
+        font-size: 30px;
+        font-weight: bold;
         color: white;
         background-color: #303F9F;
         border-radius: 15px 15px 15px 15px;
         transition: .4s;
     }
+
+    canvas#canvas {
+        border: 2px solid gray;
+    }
 }
 
-input[type="button"] {
-    font-size: 14px;
-}

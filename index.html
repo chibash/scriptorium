@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=0.5">
+  <meta name="viewport" content="width=device-width,initial-scale=0.52">
   <title>Scriptorium</title>
   <script src="lib/codemirror.js"></script>
   <link rel="stylesheet" href="lib/codemirror.css">
@@ -28,7 +28,7 @@
 </header>
 
 <div style="margin-left: 10px; margin-bottom: 0px">
-  <div id="cells" style="font-family: monospace; margin-left: 45px;">
+  <div id="cells">
   </div>
 
   <br/>
@@ -40,9 +40,11 @@
   <br/>
 
   <div style="float: left;">
-   <div id="editor" style="width: 43em; border: .7px solid gray;"></div>
+   <div id="editor"></div>
    <a href="#" class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <a href="#" class="btn-smallscreen" onclick="Scriptorium.run()">実行</a>
+   <a href="#" class="btn-smallscreen" onclick="Scriptorium.save()">保存</a>
+   <a href="#" class="btn-smallscreen" onclick="Scriptorium.load()">読込</a>
    <br/>
    <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
    </div>
@@ -52,8 +54,7 @@
   &nbsp;
   </div>
 
-  <canvas id="canvas" width=400 height=400
-          style="background-color: white; border: .7px solid gray;">
+  <canvas id="canvas" width=400 height=400>
   </canvas>
 
   <div style="clear: both;"></div>

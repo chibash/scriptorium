@@ -103,7 +103,7 @@ const Scriptorium = new class {
   // callback from turtle.js
   end_running(src, success, result) {
     const cells = document.getElementById(this.cells_id);
-    cells.innerHTML += "<pre style='padding: 5px; width: 49em; border: .7px solid gray;'>" + this.escapeHTML(src) + '</pre><p>';
+    cells.innerHTML += '<pre class="codebox">' + this.escapeHTML(src) + '</pre><p>';
     cells.innerHTML += this.consoleText;
     if (result !== undefined)
       cells.innerHTML += this.escapeHTML(result)
