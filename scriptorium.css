@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    font-size: 16px;
 }
 
 header {
@@ -17,14 +18,13 @@ h2#logo {
 }
 
 div#cells {
-    font-size: 16px;
-    font-family: monospace;
+    font-family: 'Courier', monospace;
     margin-left: 45px;
 }
 
 .codebox {
     padding: 5px;
-    width: 39.5em;
+    width: 635px;
     border: .7px solid gray;
 }
 
@@ -37,13 +37,12 @@ input[type="button"] {
 }
 
 div#editor {
-    width: 43em;
+    width: 690px;
     border: .7px solid gray;
 }
 
 .CodeMirror {
     font-family: 'Courier', monospace;
-    font-size: 16px;
 }
 
 canvas#canvas {
