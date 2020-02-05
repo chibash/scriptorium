@@ -119,7 +119,7 @@ const Scriptorium = new class {
     out.innerText = ''
     if (this.isPC) {
       this.editorArea.focus();
-        document.getElementById(this.bottom_id).scrollIntoView(false);
+      document.getElementById(this.bottom_id).scrollIntoView(false);
     }
   }
 

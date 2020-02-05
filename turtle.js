@@ -324,7 +324,7 @@ Scriptorium.TurtleCmd = class {
 
     let index = 0
     let cmd = this.commands[index++]
-    var callback = () => {
+    let callback = () => {
       if (cmd.run(this, ctx) || this.commands.length < 1) {
         if (index < this.commands.length) {
           cmd = this.commands[index++]

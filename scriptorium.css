@@ -10,11 +10,31 @@ header {
     color: white;
 }
 
-h2#logo {
+#logo {
     font-family: sans-serif;
     font-size: 24px;
+    font-weight: bold;
     padding-left: 30px;
     padding-top: 18px;
+}
+
+#logo-info {
+    font-family: sans-serif;
+    font-size: 13px;
+    float: right;
+    padding-top: 10px;
+    padding-right: 30px;
+    color: white;
+    text-decoration: none;
+}
+
+a#logo-info:hover {
+    text-decoration: underline;
+}
+
+a#logo-info:visited {
+    color: #d0d0d0;
+    text-decoration: none;
 }
 
 div#cells {
@@ -55,7 +75,7 @@ canvas#canvas {
         height: 100px;
     }
 
-    h2#logo {
+    #logo {
         font-size: 48px;
         padding-top: 36px;
     }
