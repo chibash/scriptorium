@@ -80,6 +80,12 @@ canvas#canvas {
         padding-top: 36px;
     }
 
+    #logo-info {
+        font-size: 20px;
+        padding-top: 25px;
+        padding-right: 30px;
+    }
+
     .codebox {
         border: 2px solid gray;
     }

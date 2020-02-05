@@ -252,7 +252,8 @@ Scriptorium.TurtleCmd = class {
 
   assertNumber(msg, x) {
     if (typeof x != 'number')
-      throw 'the argument to ' + msg + ' is not a number.'
+      throw Scriptorium.Msg.assertNum1 + msg +
+            Scriptorium.Msg.assertNum2
   }
 
   pushAlert(msg) {
@@ -301,7 +302,7 @@ Scriptorium.TurtleCmd = class {
     if (this.commands.length < 1)
       return
     if (this.running) {
-      this.commands = []
+      this.endTurtle()
       return
     }
 
@@ -325,27 +326,42 @@ Scriptorium.TurtleCmd = class {
     let index = 0
     let cmd = this.commands[index++]
     let callback = () => {
-      if (cmd.run(this, ctx) || this.commands.length < 1) {
-        if (index < this.commands.length) {
-          cmd = this.commands[index++]
+      if (this.running)
+        if (cmd.run(this, ctx) || this.commands.length < 1) {
+          if (index < this.commands.length) {
+            cmd = this.commands[index++]
+            window.requestAnimationFrame(callback)
+          }
+          else {
+            this.endTurtle()    // finish the execution
+            // for (const t of this.turtles)
+            //  this.clearTurtle(t, ctx)
+          }
+        }
+        else
           window.requestAnimationFrame(callback)
-        }
-        else {
-          // finish the execution
-          this.commands = []
-          this.running = false
-          // for (const t of this.turtles)
-          //  this.clearTurtle(t, ctx)
-        }
-      }
-      else
-        window.requestAnimationFrame(callback)
     }
     window.requestAnimationFrame(callback)
     this.running = true
   }
 
+  endTurtle() {
+    this.commands = []
+    this.running = false
+  }
+
+  stopTurtle(ctx) {
+    for (const cmd of this.commands)
+      if (cmd instanceof Scriptorium.End) {
+        cmd.run(this, ctx)
+        break
+      }
+
+    this.endTurtle()
+  }
+
   reset() {
+    this.endTurtle()
     for (const t of this.turtles)
       t.initialize()
 

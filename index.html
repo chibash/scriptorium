@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="scriptorium.css">
   <script src="./scriptorium.js"></script>
   <script src="./turtle.js"></script>
+  <script src="./messages.js"></script>
 </head>
 
 <body onresize="Scriptorium.resizeCanvas();">
@@ -33,7 +34,7 @@
 
   <br/>
   <input type="button" value="消去" onclick="Scriptorium.reset()"/>
-  <input type="button" value="実行" onclick="Scriptorium.run()"/>
+  <input type="button" id="run_btn1" value="実行" onclick="Scriptorium.run()"/>
   &nbsp;
   <input type="button" value="保存" onclick="Scriptorium.save()"/>
   <input type="button" value="読込" onclick="Scriptorium.load()"/>
@@ -42,7 +43,7 @@
   <div style="float: left;">
    <div id="editor"></div>
    <a href="#" class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
-   <a href="#" class="btn-smallscreen" onclick="Scriptorium.run()">実行</a>
+   <a href="#" class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</a>
    <a href="#" class="btn-smallscreen" onclick="Scriptorium.save()">保存</a>
    <a href="#" class="btn-smallscreen" onclick="Scriptorium.load()">読込</a>
    <br/>

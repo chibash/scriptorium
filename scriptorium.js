@@ -19,6 +19,8 @@ const Scriptorium = new class {
     this.output_id = 'output'
     this.canvas_id = 'canvas'
     this.bottom_id = 'bottom'
+    this.run_btn1_id = 'run_btn1'
+    this.run_btn2_id = 'run_btn2'
 
     this.editorArea = null;
     this.consoleText = '';
@@ -81,10 +83,16 @@ const Scriptorium = new class {
     catch (e) {
       success = false
       result = e
-      Scriptorium.turtleCmd.pushAlert('エラー：プログラムを実行できません\n' + e);
+      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert + e);
     }
     Scriptorium.turtleCmd.pushEnd(src, success, result)
     this.consoleText = ''
+
+    const btn1 = document.getElementById(this.run_btn1_id)
+    const btn2 = document.getElementById(this.run_btn2_id)
+    btn1.value = btn2.innerHTML = Scriptorium.Msg.stop
+    btn1.onclick = btn2.onclick = (ev) => { Scriptorium.stop_running() }
+
     const canvas = document.getElementById(this.canvas_id)
     const ctx = canvas.getContext('2d');
     Scriptorium.turtleCmd.runTurtle(canvas, ctx)
@@ -115,6 +123,7 @@ const Scriptorium = new class {
         CodeMirror.emacs.kill(editor, { line: 0, ch: 0 }, {line: editor.lineCount(), ch: 0 }, true);
     }
 
+    this.change_stop_button()
     const out = document.getElementById(this.output_id);
     out.innerText = ''
     if (this.isPC) {
@@ -123,10 +132,28 @@ const Scriptorium = new class {
     }
   }
 
+  stop_running() {
+    const canvas = document.getElementById(this.canvas_id)
+    const ctx = canvas.getContext('2d');
+    Scriptorium.turtleCmd.stopTurtle(ctx)
+    this.change_stop_button()
+    if (this.isPC)
+      this.editorArea.focus();
+  }
+
+  change_stop_button() {
+    const btn1 = document.getElementById(this.run_btn1_id)
+    const btn2 = document.getElementById(this.run_btn2_id)
+    btn1.value = btn2.innerHTML = Scriptorium.Msg.run
+    btn1.onclick = btn2.onclick = (ev) => { Scriptorium.run() }
+  }
+
   reset() {
     const canvas = document.getElementById(this.canvas_id);
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const out = document.getElementById(this.output_id);
+    out.innerText = ''
     Scriptorium.turtleCmd.reset();
     this.editorArea.focus();
   }
@@ -134,9 +161,8 @@ const Scriptorium = new class {
   save() {
     const program = this.editorArea.getDoc().getValue();
     if (program != null
-        && confirm('今編集中のプログラムを保存しますか？\n' +
-                   '以前保存したプログラムは消去されます。')) {
-      localStorage.setItem(this.class_name, JSON.stringify(program));
+        && confirm(Scriptorium.Msg.save)) {
+      // localStorage.setItem(this.class_name, JSON.stringify(program));
       this.editorArea.focus();
     }
   }
@@ -144,8 +170,7 @@ const Scriptorium = new class {
   load() {
     const program = localStorage.getItem(this.class_name);
     if (program != null
-        && confirm('保存済みのプログラムを開きますか？\n' +
-                   '今編集中のプログラムは消去されます。')) {
+        && confirm(Scriptorium.Msg.load)) {
       this.editorArea.getDoc().setValue(JSON.parse(program));
       this.editorArea.focus();
     }
