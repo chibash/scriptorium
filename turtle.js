@@ -1,9 +1,12 @@
 // Copyright (C) 2019 by Shigeru Chiba.
 
-// the following code depends on scriptorium.js
+// the following code depends on scriptorium.js and processing.js
 
-function print(value) {
-  Scriptorium.turtleCmd.push(new Scriptorium.Print(value))
+function print(...values) {
+  if (Scriptorium.turtleCmd.isProcessing)
+    Scriptorium.print(values)  // immediately print it.
+  else
+    Scriptorium.turtleCmd.push(new Scriptorium.Print(values))
 }
 
 Scriptorium.Turtle = class {
@@ -74,7 +77,7 @@ Scriptorium.PenDown = class {
     this.down = down
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     this.turtle.penDown = this.down
     return true
   }
@@ -86,7 +89,7 @@ Scriptorium.Color = class {
     this.color = color
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     this.turtle.penColor = this.color
     return true
   }
@@ -100,7 +103,7 @@ Scriptorium.Image = class {
     this.character = str.substring(0, str.length - 1)
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     this.turtle.image_char = this.character
     return true
   }
@@ -112,7 +115,7 @@ Scriptorium.Speed = class {
     this.speed = Math.max(speed, 0.1)
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     this.turtle.velocity = this.speed
     cmd.updateVelocity(this.turtle)
     return true
@@ -126,7 +129,7 @@ Scriptorium.Move = class {
     this.y = y
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     const turtle = this.turtle
     const xlen = this.x - turtle.x
     const ylen = this.y - turtle.y
@@ -150,7 +153,7 @@ Scriptorium.Forward = class {
     this.distance = distance
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     const turtle = this.turtle
     if (this.distance > turtle.velocity) {
       this.distance -= turtle.velocity
@@ -172,7 +175,7 @@ Scriptorium.Left = class {
     this.turtle = turtle
     this.direction = degree
   }
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     this.turtle.direction += this.direction
     cmd.updateVelocity(this.turtle)
     return true
@@ -185,7 +188,7 @@ Scriptorium.Right = class {
     this.degree = degree
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     this.turtle.direction -= this.degree
     cmd.updateVelocity(this.turtle)
     return true
@@ -193,11 +196,11 @@ Scriptorium.Right = class {
 }
 
 Scriptorium.Print = class {
-  constructor(value) {
-    this.message = value
+  constructor(values) {
+    this.message = values
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     Scriptorium.print(this.message)
     return true
   }
@@ -208,9 +211,23 @@ Scriptorium.Alert = class {
     this.message = msg
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     alert(this.message)
     return true
+  }
+}
+
+Scriptorium.StartProcessing = class {
+  constructor() {}
+
+  run(cmd, ctx, timestamp) {
+    if (cmd.isProcessing)
+      return cmd.processingCmd.draw(ctx, timestamp)
+    else {
+      cmd.isProcessing = true
+      cmd.processingCmd.setup(ctx, timestamp)
+      return false
+    }
   }
 }
 
@@ -221,19 +238,23 @@ Scriptorium.End = class {
     this.result = result
   }
 
-  run(cmd, ctx) {
+  run(cmd, ctx, t) {
     Scriptorium.end_running(this.source, this.success, this.result)
     return true
   }
 }
 
 Scriptorium.TurtleCmd = class {
-  constructor() {
+  constructor(proc_cmd) {
     this.commands = []
     this.turtles = []
     this.useTurtle = false
     this.running = false
+    this.isProcessing = false
+    this.processingCmd = new Scriptorium.ProcessingCmd(this)
   }
+
+  getProcessing() { return this.processingCmd.processing }
 
   addTurtle(turtle) {
     this.turtles.push(turtle)
@@ -242,6 +263,7 @@ Scriptorium.TurtleCmd = class {
   push(cmd) {
     if (cmd instanceof Scriptorium.Alert
         || cmd instanceof Scriptorium.End
+        || cmd instanceof Scriptorium.StartProcessing
         || cmd instanceof Scriptorium.Print)
       ; // do nothing
     else
@@ -254,6 +276,11 @@ Scriptorium.TurtleCmd = class {
     if (typeof x != 'number')
       throw Scriptorium.Msg.assertNum1 + msg +
             Scriptorium.Msg.assertNum2
+  }
+
+  // callback from processing.js
+  pushStartProcessing() {
+    this.push(new Scriptorium.StartProcessing())
   }
 
   pushAlert(msg) {
@@ -325,9 +352,9 @@ Scriptorium.TurtleCmd = class {
 
     let index = 0
     let cmd = this.commands[index++]
-    let callback = () => {
+    let callback = (timestamp) => {
       if (this.running)
-        if (cmd.run(this, ctx) || this.commands.length < 1) {
+        if (cmd.run(this, ctx, timestamp) || this.commands.length < 1) {
           if (index < this.commands.length) {
             cmd = this.commands[index++]
             window.requestAnimationFrame(callback)
@@ -345,15 +372,18 @@ Scriptorium.TurtleCmd = class {
     this.running = true
   }
 
+  // updates the states before stopping the turtle
   endTurtle() {
     this.commands = []
+    this.isProcessing = false
     this.running = false
+    this.processingCmd.suspend()
   }
 
   stopTurtle(ctx) {
     for (const cmd of this.commands)
       if (cmd instanceof Scriptorium.End) {
-        cmd.run(this, ctx)
+        cmd.run(this, ctx, 0)
         break
       }
 
@@ -369,11 +399,13 @@ Scriptorium.TurtleCmd = class {
   }
 }
 
+// Scriptorium.TurtleCmd is a singleton.
 Scriptorium.turtleCmd = new Scriptorium.TurtleCmd()
 
 // declare read-only global propoerties i.e. global constants.
 for (const prop of
      [['turtle', new Scriptorium.Turtle(Scriptorium.turtleCmd)],
+      ['p55', Scriptorium.turtleCmd.getProcessing()],
       ['red', '#ff0000'],
       ['green', '#00cc00'],
       ['blue', '#0066ff'],

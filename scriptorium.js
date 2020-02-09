@@ -78,7 +78,11 @@ const Scriptorium = new class {
     let result = null
     const geval = eval
     try {
-      result = geval(src);  // in the global scope
+      // MDN web docs:
+      // If you use the eval function indirectly,
+      // by invoking it via a reference other than eval,
+      // it works in the global scope rather than the local scope.
+      result = geval(src);  // not in the strict mode
     }
     catch (e) {
       success = false
@@ -101,8 +105,15 @@ const Scriptorium = new class {
   }
 
   // callback from turtle.js
-  print(value) {
-    const value2 = this.escapeHTML(value) + '<br/>';
+  print(values) {
+    let value = ''
+    if (values instanceof Array)
+      for (const v of values)
+        value += v + ' '
+    else
+      value = values
+
+      const value2 = this.escapeHTML(value) + '<br/>';
     this.consoleText += value2;
     const out = document.getElementById(this.output_id);
     out.innerText += value + '\n';
