@@ -87,7 +87,7 @@ const Scriptorium = new class {
     catch (e) {
       success = false
       result = e
-      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert + e);
+      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(this.get_line(e), e));
     }
     Scriptorium.turtleCmd.pushEnd(src, success, result)
     this.consoleText = ''
@@ -102,6 +102,16 @@ const Scriptorium = new class {
     Scriptorium.turtleCmd.runTurtle(canvas, ctx)
     if (this.isPC)
       this.editorArea.focus();
+  }
+
+  get_line(e) {
+    let line_no = e.lineNumber  // Firefox
+    if (!line_no) {
+      line_no = e.line          // Safari
+      if (!line_no)
+        line_no = '?'
+    }
+    return line_no
   }
 
   // callback from turtle.js
@@ -125,7 +135,7 @@ const Scriptorium = new class {
     cells.innerHTML += '<pre class="codebox">' + this.escapeHTML(src) + '</pre><p>';
     cells.innerHTML += this.consoleText;
     if (result !== undefined)
-      cells.innerHTML += this.escapeHTML(result)
+      cells.innerHTML += this.escapeHTML(this.get_result_message(result))
 
     cells.innerHTML += '</p>'
     if (success) {
@@ -141,6 +151,13 @@ const Scriptorium = new class {
       this.editorArea.focus();
       document.getElementById(this.bottom_id).scrollIntoView(false);
     }
+  }
+
+  get_result_message(result) {
+    if (result instanceof Error)
+      return `${result} (line: ${this.get_line(result)})`
+    else
+      return result
   }
 
   stop_running() {

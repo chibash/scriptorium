@@ -77,7 +77,7 @@ Scriptorium.ProcessingCmd = class {
 
   suspend() {
     this.suspended = true
-    if (!this.canvas) {
+    if (this.canvas) {
       this.canvas.onmousemove = null
       this.canvas = null
     }
@@ -94,7 +94,7 @@ Scriptorium.ProcessingCmd = class {
       proc.mouseY = event.pageY - rect.top - window.pageYOffset
     }
     if (setup instanceof Function) {
-      this.setup_proc(ctx)
+      this.setupProc(ctx)
       this.processing.frameCount = 0
       setup()
     }
@@ -105,7 +105,7 @@ Scriptorium.ProcessingCmd = class {
     if (draw instanceof Function) {
       const t = timestamp - this.startTime
       if (t > this.frameInterval * (this.processing.frameCount + 1)) {
-        this.setup_proc(ctx)
+        this.setupProc(ctx)
         this.processing.frameCount = Math.floor(t / this.frameInterval)
         draw()
         return this.suspended
@@ -116,7 +116,7 @@ Scriptorium.ProcessingCmd = class {
   }
 
   // prepare a Processing object for every callback
-  setup_proc(ctx) {
+  setupProc(ctx) {
     const proc = this.processing
     proc.pen = ctx
     proc.width = ctx.canvas.width

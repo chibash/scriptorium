@@ -274,8 +274,7 @@ Scriptorium.TurtleCmd = class {
 
   assertNumber(msg, x) {
     if (typeof x != 'number')
-      throw Scriptorium.Msg.assertNum1 + msg +
-            Scriptorium.Msg.assertNum2
+      throw Scriptorium.Msg.assertNum(msg)
   }
 
   // callback from processing.js
