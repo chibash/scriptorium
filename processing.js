@@ -27,7 +27,7 @@ Scriptorium.Processing = class {
   }
 
   frameRate(rate) {
-    const interval = 1000 / (rate <= 0 ? 0.0001 : rate)
+    const interval = rate <= 0 ? 60000 : rate > 60 ? 60 : 1000 / rate
     this.processingCmd.frameInterval = interval
   }
 
@@ -41,7 +41,7 @@ Scriptorium.Processing = class {
     else
       this.pen.fillStyle = r
 
-    this.pen.fillRect(0, 0, this.width - 1, this.height - 1)
+    this.pen.fillRect(0, 0, this.width, this.height)
     this.pen.fillStyle = old_style
   }
 
@@ -63,6 +63,13 @@ Scriptorium.Processing = class {
     else
       return `rgb(${bit8(red)}, ${bit8(green)}, ${bit8(blue)})`
   }
+
+  line(x1, y1, x2, y2) {
+    this.pen.beginPath()
+    this.pen.moveTo(x1, y1)
+    this.pen.lineTo(x2, y2)
+    this.pen.stroke()
+  }
 }
 
 Scriptorium.ProcessingCmd = class {
@@ -70,7 +77,7 @@ Scriptorium.ProcessingCmd = class {
     this.turtleCmd = turtle_cmd
     this.processing = new Scriptorium.Processing(this)
     this.suspended = true
-    this.frameInterval = 1000 / 60 // msec.
+    this.frameInterval = 1000 / 10 // msec.  10 fps.
     this.startTime = 0
     this.canvas = null
   }
@@ -88,6 +95,7 @@ Scriptorium.ProcessingCmd = class {
     this.startTime = timestamp
     this.canvas = ctx.canvas
     const proc = this.processing
+    proc.frameCount = 0
     this.canvas.onmousemove = event => {
       const rect = this.canvas.getBoundingClientRect()
       proc.mouseX = event.pageX - rect.left - window.pageXOffset
@@ -119,7 +127,7 @@ Scriptorium.ProcessingCmd = class {
   setupProc(ctx) {
     const proc = this.processing
     proc.pen = ctx
-    proc.width = ctx.canvas.width
-    proc.height = ctx.canvas.height
+    proc.width = ctx.canvas.width - 1
+    proc.height = ctx.canvas.height - 1
   }
 }
