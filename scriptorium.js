@@ -27,6 +27,7 @@ const Scriptorium = new class {
     this.class_name = 'scriptorium';
 
     this.isPC = !('ontouchend' in document)
+    this.isSafari = new Error().line
   }
 
   onload() {
@@ -54,7 +55,7 @@ const Scriptorium = new class {
   resizeCanvas() {
     const editor = document.getElementById(this.editor_id);
     let w = document.body.clientWidth - editor.clientWidth - 50;
-    let h = document.body.clientHeight - 50;
+    let h = document.body.clientHeight - 100;
     if (h < w)
       w = h;
 
@@ -74,6 +75,13 @@ const Scriptorium = new class {
     if (src === '')
       return;
 
+    if (this.isSafari)
+      this.eval_src(src)
+    else
+      this.run_src(src)
+  }
+
+  eval_src(src) {
     let success = true
     let result = null
     const geval = eval
@@ -82,13 +90,35 @@ const Scriptorium = new class {
       // If you use the eval function indirectly,
       // by invoking it via a reference other than eval,
       // it works in the global scope rather than the local scope.
-      result = geval(src);  // not in the strict mode
+      // If it works in the local scope, the declared functions there
+      // are not globally visible.
+      result = geval(src)
     }
     catch (e) {
       success = false
       result = e
-      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(this.get_line(e), e));
+      const line = e.line    // e.line is available only on Safari
+      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line ? line : '?', e));
     }
+
+    this.post_run(src, success, result)
+  }
+
+  run_src(src) {
+    window.onerror = (msg, src, line, col, err) => {
+      const result = err === null ? msg : err
+      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line, result))
+      Scriptorium.post_run(Scriptorium.eval_src, false, result)
+      return false;   // call the default error handler
+    }
+
+    Scriptorium.eval_src = src
+    const s = document.createElement('script');
+    s.innerHTML = src + '\n ;\nScriptorium.post_run(Scriptorium.eval_src, true, undefined);\n'
+    document.body.appendChild(s);
+  }
+
+  post_run(src, success, result) {
     Scriptorium.turtleCmd.pushEnd(src, success, result)
     this.consoleText = ''
 
@@ -100,6 +130,7 @@ const Scriptorium = new class {
     const canvas = document.getElementById(this.canvas_id)
     const ctx = canvas.getContext('2d');
     Scriptorium.turtleCmd.runTurtle(canvas, ctx)
+    window.onerror = null
     if (this.isPC)
       this.editorArea.focus();
   }
@@ -123,7 +154,7 @@ const Scriptorium = new class {
     else
       value = values
 
-      const value2 = this.escapeHTML(value) + '<br/>';
+    const value2 = this.escapeHTML(value) + '<br/>';
     this.consoleText += value2;
     const out = document.getElementById(this.output_id);
     out.innerText += value + '\n';
