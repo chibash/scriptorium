@@ -11,7 +11,7 @@ header {
 }
 
 #logo {
-    font-family: sans-serif;
+    font-family: 'Arial', sans-serif;
     font-size: 24px;
     font-weight: bold;
     padding-left: 30px;
@@ -19,7 +19,7 @@ header {
 }
 
 #logo-info {
-    font-family: sans-serif;
+    font-family: 'Arial', sans-serif;
     font-size: 13px;
     float: right;
     padding-top: 10px;
