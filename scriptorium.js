@@ -143,16 +143,6 @@ const Scriptorium = new class {
       this.editorArea.focus();
   }
 
-  get_line(e) {
-    let line_no = e.lineNumber  // Firefox
-    if (!line_no) {
-      line_no = e.line          // Safari
-      if (!line_no)
-        line_no = '?'
-    }
-    return line_no
-  }
-
   // callback from turtle.js
   print(values) {
     let value = ''
@@ -229,7 +219,7 @@ const Scriptorium = new class {
     const program = this.editorArea.getDoc().getValue();
     if (program != null
         && confirm(Scriptorium.Msg.save)) {
-      // localStorage.setItem(this.class_name, JSON.stringify(program));
+      localStorage.setItem(this.class_name, JSON.stringify(program));
       this.editorArea.focus();
     }
   }
