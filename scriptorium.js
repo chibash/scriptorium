@@ -28,6 +28,14 @@ const Scriptorium = new class {
 
     this.isPC = !('ontouchend' in document)
     this.isSafari = new Error().line
+    this.running_src = null
+
+    this.ErrorLine = class {
+      constructor(line, e) {
+        this.line = line
+        this.error = e
+      }
+    }
   }
 
   onload() {
@@ -96,8 +104,8 @@ const Scriptorium = new class {
     }
     catch (e) {
       success = false
-      result = e
       const line = e.line    // e.line is available only on Safari
+      result = new this.ErrorLine(line, e)
       Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line ? line : '?', e));
     }
 
@@ -108,13 +116,13 @@ const Scriptorium = new class {
     window.onerror = (msg, src, line, col, err) => {
       const result = err === null ? msg : err
       Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line, result))
-      Scriptorium.post_run(Scriptorium.eval_src, false, result)
+      Scriptorium.post_run(Scriptorium.running_src, false, new this.ErrorLine(line, result))
       return false;   // call the default error handler
     }
 
-    Scriptorium.eval_src = src
+    Scriptorium.running_src = src
     const s = document.createElement('script');
-    s.innerHTML = src + '\n ;\nScriptorium.post_run(Scriptorium.eval_src, true, undefined);\n'
+    s.innerHTML = src + '\n ;\nScriptorium.post_run(Scriptorium.running_src, true, undefined);\n'
     document.body.appendChild(s);
   }
 
@@ -185,8 +193,8 @@ const Scriptorium = new class {
   }
 
   get_result_message(result) {
-    if (result instanceof Error)
-      return `${result} (line: ${this.get_line(result)})`
+    if (result instanceof this.ErrorLine)
+      return `${result.error} (line: ${result.line})`
     else
       return result
   }
