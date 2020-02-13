@@ -45,7 +45,7 @@ div#cells {
 .codebox {
     padding: 5px;
     width: 635px;
-    border: .7px solid gray;
+    border: 1px solid gray;
 }
 
 a.btn-smallscreen {
@@ -58,7 +58,7 @@ input[type="button"] {
 
 div#editor {
     width: 690px;
-    border: .7px solid gray;
+    border: 1px solid gray;
 }
 
 .CodeMirror {
@@ -67,7 +67,21 @@ div#editor {
 
 canvas#canvas {
     background-color: white;
-    border: .7px solid gray;
+    border: 1px solid gray;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .codebox {
+        border: .5px solid gray;
+    }
+
+    div#editor {
+        border: .5px solid gray;
+    }
+
+    canvas#canvas {
+        border: .5px solid gray;
+    }
 }
 
 @media screen and (max-width: 900px) {
