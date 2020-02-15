@@ -2,11 +2,13 @@
 
 // the following code depends on scriptorium.js and processing.js
 
-function print(...values) {
+Scriptorium.stdConsoleLog = console.log
+console.log = function(...args) {
+  Scriptorium.stdConsoleLog.apply(console, args)
   if (Scriptorium.turtleCmd.isProcessing)
-    Scriptorium.print(values)  // immediately print it.
+    Scriptorium.print(args)  // immediately print it.
   else
-    Scriptorium.turtleCmd.push(new Scriptorium.Print(values))
+    Scriptorium.turtleCmd.push(new Scriptorium.Print(args))
 }
 
 Scriptorium.Turtle = class {
