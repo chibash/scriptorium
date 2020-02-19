@@ -90,7 +90,7 @@ Scriptorium.ProcessingCmd = class {
     }
   }
 
-  setup(ctx, timestamp) {
+  callSetup(ctx, timestamp) {
     this.suspended = false
     this.startTime = timestamp
     this.canvas = ctx.canvas
@@ -109,7 +109,7 @@ Scriptorium.ProcessingCmd = class {
   }
 
   // This returns true only when the processing stops.
-  draw(ctx, timestamp) {
+  callDraw(ctx, timestamp) {
     if (draw instanceof Function) {
       const t = timestamp - this.startTime
       if (t > this.frameInterval * (this.processing.frameCount + 1)) {

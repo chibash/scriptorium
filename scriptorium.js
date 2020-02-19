@@ -32,7 +32,7 @@ const Scriptorium = new class {
 
     this.ErrorLine = class {
       constructor(line, e) {
-        this.line = line
+        this.line = line ? line : '?'
         this.error = e
       }
     }
@@ -78,18 +78,37 @@ const Scriptorium = new class {
     ctx.putImageData(img, 0, 0);
   }
 
+  /*
+    Control flow:
+    run() -> evalSrc() -> postRun()             -> T.runTurtle()
+          -> runSrc()  ~> postRun()             -> T.runTurtle()
+                       ~> onerror -> postRun()  -> T.runTurtle()
+
+    -> T.runTurtle() -> T.endTurtle()
+                     ~> timer -> run()     ~> timer
+                              -> End.run() -> endRunning() -> T.endTurtle()
+                              -> StartProcessing.run() -> T.stopTurtle()
+                     ~> stopRunning() -> T.stopTurtle()
+
+    -> T.stopTurtle() -> endRunning() -> T.endTurtle()
+
+    ~> : callback
+    -> : function call
+    T. : TurtleCmd
+  */
+
   run() {
     const src = this.editorArea.getDoc().getValue();
     if (src === '')
       return;
 
     if (this.isSafari)
-      this.eval_src(src)
+      this.evalSrc(src)
     else
-      this.run_src(src)
+      this.runSrc(src)
   }
 
-  eval_src(src) {
+  evalSrc(src) {
     let success = true
     let result = null
     const geval = eval
@@ -104,36 +123,41 @@ const Scriptorium = new class {
     }
     catch (e) {
       success = false
-      const line = e.line    // e.line is available only on Safari
-      result = new this.ErrorLine(line, e)
-      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line ? line : '?', e));
+      result = this.toErrorLine(e)
+      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(result.line, e));
     }
 
-    this.post_run(src, success, result)
+    this.postRun(src, success, result)
   }
 
-  run_src(src) {
+  toErrorLine(e) {
+    // e.line is available only on Safari
+    const line = e.line ? e.line : e.lineNumber
+    return new this.ErrorLine(line, e)
+  }
+
+  runSrc(src) {
     window.onerror = (msg, src, line, col, err) => {
       const result = err === null ? msg : err
       Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line, result))
-      Scriptorium.post_run(Scriptorium.running_src, false, new this.ErrorLine(line, result))
+      Scriptorium.postRun(Scriptorium.running_src, false, new this.ErrorLine(line, result))
       return false;   // call the default error handler
     }
 
     Scriptorium.running_src = src
     const s = document.createElement('script');
-    s.innerHTML = src + '\n ;\nScriptorium.post_run(Scriptorium.running_src, true, undefined);\n'
+    s.innerHTML = src + '\n ;\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
     document.body.appendChild(s);
   }
 
-  post_run(src, success, result) {
+  postRun(src, success, result) {
     Scriptorium.turtleCmd.pushEnd(src, success, result)
     this.consoleText = ''
 
     const btn1 = document.getElementById(this.run_btn1_id)
     const btn2 = document.getElementById(this.run_btn2_id)
     btn1.value = btn2.innerHTML = Scriptorium.Msg.stop
-    btn1.onclick = btn2.onclick = (ev) => { Scriptorium.stop_running() }
+    btn1.onclick = btn2.onclick = (ev) => { Scriptorium.stopRunning() }
 
     const canvas = document.getElementById(this.canvas_id)
     const ctx = canvas.getContext('2d');
@@ -159,12 +183,12 @@ const Scriptorium = new class {
   }
 
   // callback from turtle.js
-  end_running(src, success, result) {
+  endRunning(src, success, result) {
     const cells = document.getElementById(this.cells_id);
     cells.innerHTML += '<pre class="codebox">' + this.escapeHTML(src) + '</pre><p>';
     cells.innerHTML += this.consoleText;
     if (result !== undefined)
-      cells.innerHTML += this.escapeHTML(this.get_result_message(result))
+      cells.innerHTML += this.escapeHTML(this.getResultingMessage(result))
 
     cells.innerHTML += '</p>'
     if (success) {
@@ -173,7 +197,7 @@ const Scriptorium = new class {
         CodeMirror.emacs.kill(editor, { line: 0, ch: 0 }, {line: editor.lineCount(), ch: 0 }, true);
     }
 
-    this.change_stop_button()
+    this.changeStopButton()
     const out = document.getElementById(this.output_id);
     out.innerText = ''
     if (this.isPC) {
@@ -182,23 +206,22 @@ const Scriptorium = new class {
     }
   }
 
-  get_result_message(result) {
+  getResultingMessage(result) {
     if (result instanceof this.ErrorLine)
       return `${result.error} (line: ${result.line})`
     else
       return result
   }
 
-  stop_running() {
-    const canvas = document.getElementById(this.canvas_id)
-    const ctx = canvas.getContext('2d');
-    Scriptorium.turtleCmd.stopTurtle(ctx)
-    this.change_stop_button()
+  // event handler for the "Stop" button
+  stopRunning() {
+    Scriptorium.turtleCmd.stopTurtle(true, undefined)
+    this.changeStopButton()
     if (this.isPC)
       this.editorArea.focus();
   }
 
-  change_stop_button() {
+  changeStopButton() {
     const btn1 = document.getElementById(this.run_btn1_id)
     const btn2 = document.getElementById(this.run_btn2_id)
     btn1.value = btn2.innerHTML = Scriptorium.Msg.run

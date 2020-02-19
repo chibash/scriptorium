@@ -223,12 +223,19 @@ Scriptorium.StartProcessing = class {
   constructor() {}
 
   run(cmd, ctx, timestamp) {
-    if (cmd.isProcessing)
-      return cmd.processingCmd.draw(ctx, timestamp)
-    else {
-      cmd.isProcessing = true
-      cmd.processingCmd.setup(ctx, timestamp)
-      return false
+    try {
+      if (cmd.isProcessing)
+        return cmd.processingCmd.callDraw(ctx, timestamp)
+      else {
+        cmd.isProcessing = true
+        cmd.processingCmd.callSetup(ctx, timestamp)
+        return false
+      }
+    } catch (e) {
+      const result = Scriptorium.toErrorLine(e)
+      alert(Scriptorium.Msg.alert(result.line, e))
+      cmd.stopTurtle(false, result)
+      return true
     }
   }
 }
@@ -241,13 +248,13 @@ Scriptorium.End = class {
   }
 
   run(cmd, ctx, t) {
-    Scriptorium.end_running(this.source, this.success, this.result)
+    Scriptorium.endRunning(this.source, this.success, this.result)
     return true
   }
 }
 
 Scriptorium.TurtleCmd = class {
-  constructor(proc_cmd) {
+  constructor() {
     this.commands = []
     this.turtles = []
     this.useTurtle = false
@@ -373,6 +380,7 @@ Scriptorium.TurtleCmd = class {
     this.running = true
   }
 
+  // private method
   // updates the states before stopping the turtle
   endTurtle() {
     this.commands = []
@@ -381,10 +389,12 @@ Scriptorium.TurtleCmd = class {
     this.processingCmd.suspend()
   }
 
-  stopTurtle(ctx) {
+  // abruptly stops turtle graphics.
+  // it is called by Scriptorium.stopRunning().
+  stopTurtle(isSuccess, result) {
     for (const cmd of this.commands)
       if (cmd instanceof Scriptorium.End) {
-        cmd.run(this, ctx, 0)
+        Scriptorium.endRunning(cmd.source, isSuccess, result)
         break
       }
 
