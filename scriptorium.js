@@ -132,6 +132,7 @@ const Scriptorium = new class {
 
   toErrorLine(e) {
     // e.line is available only on Safari
+    // e.lineNumber is available only on Firefox
     const line = e.line ? e.line : e.lineNumber
     return new this.ErrorLine(line, e)
   }

@@ -223,15 +223,37 @@ Scriptorium.StartProcessing = class {
   constructor() {}
 
   run(cmd, ctx, timestamp) {
+    window.onerror = (msg, src, line, col, err) => {
+      let result
+      if (err === null) {
+        err = msg
+        result = msg
+      }
+      else
+        result = Scriptorium.toErrorLine(err)
+
+      alert(Scriptorium.Msg.alert(line, err))
+      cmd.stopTurtle(false, result)
+      window.onerror = null
+      return false;   // call the default error handler
+    }
+
     try {
-      if (cmd.isProcessing)
-        return cmd.processingCmd.callDraw(ctx, timestamp)
+      if (cmd.isProcessing) {
+        const result = cmd.processingCmd.callDraw(ctx, timestamp)
+        window.onerror = null
+        return result
+      }
       else {
         cmd.isProcessing = true
         cmd.processingCmd.callSetup(ctx, timestamp)
+        window.onerror = null
         return false
       }
     } catch (e) {
+      if (!Scriptorium.isSafari)
+        throw e
+
       const result = Scriptorium.toErrorLine(e)
       alert(Scriptorium.Msg.alert(result.line, e))
       cmd.stopTurtle(false, result)
