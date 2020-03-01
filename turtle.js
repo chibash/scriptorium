@@ -238,26 +238,30 @@ Scriptorium.StartProcessing = class {
       return false;   // call the default error handler
     }
 
-    try {
-      if (cmd.isProcessing) {
-        const result = cmd.processingCmd.callDraw(ctx, timestamp)
-        window.onerror = null
-        return result
+    if (Scriptorium.isSafari)
+      try {
+        this.runSetupOrDraw(cmd, ctx, timestamp)
+      } catch (e) {
+        const result = Scriptorium.toErrorLine(e)
+        alert(Scriptorium.Msg.alert(result.line, e))
+        cmd.stopTurtle(false, result)
+        return true
       }
-      else {
-        cmd.isProcessing = true
-        cmd.processingCmd.callSetup(ctx, timestamp)
-        window.onerror = null
-        return false
-      }
-    } catch (e) {
-      if (!Scriptorium.isSafari)
-        throw e
+    else
+      this.runSetupOrDraw(cmd, ctx, timestamp)
+  }
 
-      const result = Scriptorium.toErrorLine(e)
-      alert(Scriptorium.Msg.alert(result.line, e))
-      cmd.stopTurtle(false, result)
-      return true
+  runSetupOrDraw(cmd, ctx, timestamp) {
+    if (cmd.isProcessing) {
+      const result = cmd.processingCmd.callDraw(ctx, timestamp)
+      window.onerror = null
+      return result
+    }
+    else {
+      cmd.isProcessing = true
+      cmd.processingCmd.callSetup(ctx, timestamp)
+      window.onerror = null
+      return false
     }
   }
 }
