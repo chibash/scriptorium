@@ -102,7 +102,7 @@ Scriptorium.Image = class {
     this.turtle = turtle
     // since character might not be a string
     const str = character + ' '
-    this.character = str.substring(0, str.length - 1)
+    this.character = str.substring(0, 1)
   }
 
   run(cmd, ctx, t) {
