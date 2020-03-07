@@ -101,8 +101,9 @@ Scriptorium.Image = class {
   constructor(turtle, character) {
     this.turtle = turtle
     // since character might not be a string
-    const str = character + ' '
-    this.character = str.substring(0, 1)
+    const str = String(character)
+    const arr = str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\uD800-\uDFFF]/g) || ['@']
+    this.character = arr[0]
   }
 
   run(cmd, ctx, t) {
