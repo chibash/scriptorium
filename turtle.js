@@ -27,6 +27,7 @@ Scriptorium.Turtle = class {
     this.y_velocity = 0.0
     this.penDown = true
     this.penColor = '#000000'  // black
+    this.penWidth = 1
     this.bgImage = null
   }
 
@@ -40,6 +41,10 @@ Scriptorium.Turtle = class {
 
   color(c) {
     this.turtleCmd.push(new Scriptorium.Color(this, c))
+  }
+
+  width(w) {
+    this.turtleCmd.push(new Scriptorium.PenWidth(this, w))
   }
 
   image(c) {
@@ -93,6 +98,18 @@ Scriptorium.Color = class {
 
   run(cmd, ctx, t) {
     this.turtle.penColor = this.color
+    return true
+  }
+}
+
+Scriptorium.PenWidth = class {
+  constructor(turtle, width) {
+    this.turtle = turtle
+    this.penWidth = width
+  }
+
+  run(cmd, ctx, t) {
+    this.turtle.penWidth = this.penWidth
     return true
   }
 }
@@ -335,6 +352,7 @@ Scriptorium.TurtleCmd = class {
     this.clearTurtle(turtle, ctx)
     if (turtle.penDown) {
       ctx.strokeStyle = turtle.penColor
+      ctx.lineWidth = turtle.penWidth
       ctx.beginPath()
       ctx.moveTo(turtle.x, turtle.y)
       ctx.lineTo(x, y)
