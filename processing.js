@@ -77,9 +77,13 @@ Scriptorium.ProcessingCmd = class {
     this.turtleCmd = turtle_cmd
     this.processing = new Scriptorium.Processing(this)
     this.suspended = true
-    this.frameInterval = 1000 / 10 // msec.  10 fps.
+    this.initFrameRate()
     this.startTime = 0
     this.canvas = null
+  }
+
+  initFrameRate() {
+    this.frameInterval = 1000 / 10 // msec.  10 fps.
   }
 
   suspend() {
@@ -92,6 +96,7 @@ Scriptorium.ProcessingCmd = class {
 
   callSetup(ctx, timestamp) {
     this.suspended = false
+    this.initFrameRate()
     this.startTime = timestamp
     this.canvas = ctx.canvas
     const proc = this.processing
