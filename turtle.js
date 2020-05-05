@@ -461,7 +461,7 @@ Scriptorium.turtleCmd = new Scriptorium.TurtleCmd()
 // declare read-only global propoerties i.e. global constants.
 for (const prop of
      [['turtle', new Scriptorium.Turtle(Scriptorium.turtleCmd)],
-      ['p55', Scriptorium.turtleCmd.getProcessing()],
+      ['pro', Scriptorium.turtleCmd.getProcessing()],
       ['red', '#ff0000'],
       ['green', '#00cc00'],
       ['blue', '#0066ff'],

@@ -87,6 +87,7 @@ Scriptorium.ProcessingCmd = class {
   }
 
   suspend() {
+    this.initFrameRate()
     this.suspended = true
     if (this.canvas) {
       this.canvas.onmousemove = null
@@ -96,7 +97,6 @@ Scriptorium.ProcessingCmd = class {
 
   callSetup(ctx, timestamp) {
     this.suspended = false
-    this.initFrameRate()
     this.startTime = timestamp
     this.canvas = ctx.canvas
     const proc = this.processing
