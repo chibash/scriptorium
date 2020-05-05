@@ -258,7 +258,7 @@ Scriptorium.StartProcessing = class {
 
     if (Scriptorium.isSafari)
       try {
-        this.runSetupOrDraw(cmd, ctx, timestamp)
+        return this.runSetupOrDraw(cmd, ctx, timestamp)
       } catch (e) {
         const result = Scriptorium.toErrorLine(e)
         alert(Scriptorium.Msg.alert(result.line, e))
@@ -266,7 +266,7 @@ Scriptorium.StartProcessing = class {
         return true
       }
     else
-      this.runSetupOrDraw(cmd, ctx, timestamp)
+      return this.runSetupOrDraw(cmd, ctx, timestamp)
   }
 
   runSetupOrDraw(cmd, ctx, timestamp) {
