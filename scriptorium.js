@@ -147,7 +147,7 @@ const Scriptorium = new class {
 
     Scriptorium.running_src = src
     const s = document.createElement('script');
-    s.innerHTML = src + '\n ;\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
+    s.innerHTML = '{ ' + src + '\n ;\n}\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
     document.body.appendChild(s);
   }
 
