@@ -43,10 +43,10 @@
 
   <div style="float: left;">
    <div id="editor"></div>
-   <a href="#" class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
-   <a href="#" class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</a>
-   <a href="#" class="btn-smallscreen" onclick="Scriptorium.save()">保存</a>
-   <a href="#" class="btn-smallscreen" onclick="Scriptorium.load()">読込</a>
+   <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
+   <button class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.save()">保存</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.load()">読込</button>
    <br/>
    <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
    </div>
@@ -58,7 +58,9 @@
 
   <canvas id="canvas" width=400 height=400>
   </canvas>
-
+  <button class="btn-smallscreen" id="left-btn">◀</button>
+  <button class="btn-smallscreen" id="up-btn">▲</button>
+  <button class="btn-smallscreen" id="right-btn">▶</button>
   <div style="clear: both;"></div>
 </div>
 

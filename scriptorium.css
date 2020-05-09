@@ -48,7 +48,7 @@ div#cells {
     border: 1px solid gray;
 }
 
-a.btn-smallscreen {
+button.btn-smallscreen {
     display: none;
 }
 
@@ -112,20 +112,27 @@ canvas#canvas {
         border: 2px solid gray;
     }
 
-    a.btn-smallscreen {
+    button.btn-smallscreen {
         display: inline-block;
-        width: 3.2em;
+        width: 5.3em;
+        height: 2em;
         margin: 10px 0 10px 10px;
         padding: 0.3em 1em;
         text-decoration: none;
-        text-align:center;
+        text-align: center;
         font-family: sans-serif;
         font-size: 30px;
         font-weight: bold;
         color: white;
         background-color: #303F9F;
         border-radius: 15px 15px 15px 15px;
+        border-style: none;
         transition: .4s;
+    }
+
+    button#left-btn, #up-btn, #right-btn {
+        width: 2em;
+        padding: 0.3em 0.3em;
     }
 
     canvas#canvas {
