@@ -50,10 +50,12 @@ div#cells {
 
 button.btn-smallscreen {
     display: none;
+    font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
 }
 
 input[type="button"] {
     font-size: 16px;
+    font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
 }
 
 div#editor {
@@ -130,7 +132,7 @@ canvas#canvas {
         transition: .4s;
     }
 
-    button#left-btn, #up-btn, #right-btn {
+    button.key {
         width: 2em;
         padding: 0.3em 0.3em;
     }
