@@ -9,6 +9,8 @@ Scriptorium.Processing = class {
   constructor(proc_cmd) {
     this.processingCmd = proc_cmd
     this.pen = null
+    this.penWithStroke = false
+    this.penWithFill = false
     this.frameCount = 0
     this.width = 0
     this.height = 0
@@ -32,7 +34,10 @@ Scriptorium.Processing = class {
   }
 
   background(r, ...args) {
-    const old_style = this.pen.fillStyle
+    if (this.pen == null)
+      return
+
+      const old_style = this.pen.fillStyle
     if (typeof(r) === 'number') {
       const g = args[0] || r
       const b = args[1] || r
@@ -64,11 +69,44 @@ Scriptorium.Processing = class {
       return `rgb(${bit8(red)}, ${bit8(green)}, ${bit8(blue)})`
   }
 
+  noFill() {
+    this.penWithFill = false
+  }
+
+  fill(style) {
+    this.penWithFill = true
+    if (this.pen != null)
+      this.pen.fillStyle = typeof style == 'number' ? this.color(style) : style
+  }
+
+  noStroke() {
+    this.penWithStroke = false
+  }
+
+  stroke(style) {
+    this.penWithStroke = true
+    if (this.pen != null)
+      this.pen.strokeStyle = typeof style == 'number' ? this.color(style) : style
+  }
+
   line(x1, y1, x2, y2) {
-    this.pen.beginPath()
-    this.pen.moveTo(x1, y1)
-    this.pen.lineTo(x2, y2)
-    this.pen.stroke()
+    if (this.penWithStroke && this.pen != null) {
+      this.pen.beginPath()
+      this.pen.moveTo(x1, y1)
+      this.pen.lineTo(x2, y2)
+      this.pen.stroke()
+    }
+  }
+
+  rect(x, y, width, height) {
+    if (this.pen != null) {
+      this.pen.rect(x, y, width, height)
+      if (this.penWithFill)
+        this.pen.fill()
+
+        if (this.penWithStroke)
+        this.pen.stroke()
+    }
   }
 }
 
@@ -132,6 +170,8 @@ Scriptorium.ProcessingCmd = class {
   setupProc(ctx) {
     const pr = this.processing
     pr.pen = ctx
+    pr.fill('#ffffff')
+    pr.stroke('#000000')
     pr.width = ctx.canvas.width - 1
     pr.height = ctx.canvas.height - 1
   }
