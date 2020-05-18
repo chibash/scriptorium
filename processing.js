@@ -100,6 +100,7 @@ Scriptorium.Processing = class {
 
   rect(x, y, width, height) {
     if (this.pen != null) {
+      this.pen.beginPath()
       this.pen.rect(x, y, width, height)
       if (this.penWithFill)
         this.pen.fill()
