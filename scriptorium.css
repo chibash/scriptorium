@@ -70,6 +70,7 @@ div#editor {
 canvas#canvas {
     background-color: white;
     border: 1px solid gray;
+    touch-action: manipulation;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
