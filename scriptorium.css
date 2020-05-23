@@ -73,6 +73,10 @@ canvas#canvas {
     touch-action: manipulation;
 }
 
+canvas#canvas:focus {
+    outline: 1px solid lightgray;
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .codebox {
         border: .5px solid gray;

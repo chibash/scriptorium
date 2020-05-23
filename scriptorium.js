@@ -229,6 +229,10 @@ const Scriptorium = new class {
     btn1.onclick = btn2.onclick = (ev) => { Scriptorium.run() }
   }
 
+  buttonClicked(key) {
+    this.turtleCmd.processingCmd.callKeyPressed(key)
+  }
+
   reset() {
     const canvas = document.getElementById(this.canvas_id);
     const ctx = canvas.getContext('2d');

@@ -4,6 +4,8 @@
 
 setup = undefined
 draw = undefined
+mouseClicked = undefined
+keyPressed = undefined
 
 Scriptorium.Processing = class {
   constructor(proc_cmd) {
@@ -16,6 +18,7 @@ Scriptorium.Processing = class {
     this.height = 0
     this.mouseX = 0
     this.mouseY = 0
+    this.key = 0
   }
 
   start() {
@@ -128,8 +131,11 @@ Scriptorium.ProcessingCmd = class {
   suspend() {
     this.initFrameRate()
     this.suspended = true
+    this.processing.pen = null
     if (this.canvas) {
       this.canvas.onmousemove = null
+      this.canvas.onclick = null
+      this.canvas.onkeydown = null
       this.canvas = null
     }
   }
@@ -140,11 +146,25 @@ Scriptorium.ProcessingCmd = class {
     this.canvas = ctx.canvas
     const pr = this.processing
     pr.frameCount = -1
+
     this.canvas.onmousemove = event => {
-      const rect = this.canvas.getBoundingClientRect()
-      pr.mouseX = event.pageX - rect.left - window.pageXOffset
-      pr.mouseY = event.pageY - rect.top - window.pageYOffset
+      pr.mouseX = event.offsetX
+      pr.mouseY = event.offsetY
     }
+
+    this.canvas.onclick = event => {
+      pr.mouseX = event.offsetX
+      pr.mouseY = event.offsetY
+      if (mouseClicked instanceof Function) {
+        this.setupProc(this.canvas.getContext('2d'))
+        mouseClicked()
+      }
+    }
+
+    this.canvas.onkeydown = event => {
+      this.callKeyPressed(event.key)
+    }
+
     if (setup instanceof Function) {
       this.setupProc(ctx)
       this.processing.frameCount += 1
@@ -164,7 +184,16 @@ Scriptorium.ProcessingCmd = class {
       }
     }
     else
-      return true
+      return !(mouseClicked instanceof Function
+               || keyPressed instanceof Function)
+  }
+
+  callKeyPressed(key) {
+    if (this.canvas && keyPressed instanceof Function) {
+      this.processing.key = key
+      this.setupProc(this.canvas.getContext('2d'))
+      keyPressed()
+    }
   }
 
   // prepare a Processing object for every callback
