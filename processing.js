@@ -92,6 +92,16 @@ Scriptorium.Processing = class {
       this.pen.strokeStyle = typeof style == 'number' ? this.color(style) : style
   }
 
+  text(t, x, y) {
+    if (this.pen != null) {
+      if (this.penWithFill)
+        this.pen.fillText(t, x, y)
+
+      if (this.penWithStroke)
+        this.pen.strokeText(t, x, y)
+    }
+  }
+
   line(x1, y1, x2, y2) {
     if (this.penWithStroke && this.pen != null) {
       this.pen.beginPath()
@@ -110,6 +120,44 @@ Scriptorium.Processing = class {
 
         if (this.penWithStroke)
         this.pen.stroke()
+    }
+  }
+
+  arc(x, y, w, h, start, stop) {
+    if (this.pen != null) {
+      if (this.penWithFill) {
+        this.pen.beginPath()
+        this.pen.moveTo(x, y)
+        this.pen.ellipse(x, y, w, h, 0, start, stop)
+        this.pen.lineTo(x, y)
+        this.pen.fill()
+      }
+
+      if (this.penWithStroke) {
+        this.pen.beginPath()
+        this.pen.ellipse(x, y, w, h, 0, start, stop)
+        this.pen.stroke()
+      }
+    }
+  }
+
+  circle(x, y, r) {
+    this.ellipse(x, y, r, r)
+  }
+
+  ellipse(x, y, w, h) {
+    if (this.pen != null) {
+      if (this.penWithFill) {
+        this.pen.beginPath()
+        this.pen.ellipse(x, y, w, h, 0, 0, Math.PI * 2.0)
+        this.pen.fill()
+      }
+
+      if (this.penWithStroke) {
+        this.pen.beginPath()
+        this.pen.ellipse(x, y, w, h, 0, 0, Math.PI * 2.0)
+        this.pen.stroke()
+      }
     }
   }
 }
