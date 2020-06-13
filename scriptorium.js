@@ -3,7 +3,7 @@
 'use strict';
 
 function* range(from, to=null) {
-  if (to == null) {
+  if (to === null) {
     to = from
     from = 0
   }
