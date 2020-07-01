@@ -72,6 +72,11 @@ Scriptorium.Processing = class {
       return `rgb(${bit8(red)}, ${bit8(green)}, ${bit8(blue)})`
   }
 
+  textFont(f) {
+    if (this.pen != null)
+      this.pen.font = f
+  }
+
   noFill() {
     this.penWithFill = false
   }
@@ -250,6 +255,7 @@ Scriptorium.ProcessingCmd = class {
     pr.pen = ctx
     pr.fill('#ffffff')
     pr.stroke('#000000')
+    pr.textFont('32px sans-serif')
     pr.width = ctx.canvas.width - 1
     pr.height = ctx.canvas.height - 1
   }
