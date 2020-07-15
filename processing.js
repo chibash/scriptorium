@@ -175,6 +175,7 @@ Scriptorium.ProcessingCmd = class {
     this.initFrameRate()
     this.startTime = 0
     this.canvas = null
+    this.prevFunctions = {}
   }
 
   initFrameRate() {
@@ -193,7 +194,30 @@ Scriptorium.ProcessingCmd = class {
     }
   }
 
+  checkFunctions() {
+    const funcs = this.prevFunctions
+    if (funcs.setup != setup || funcs.draw != draw
+        || funcs.mouseClicked != mouseClicked || funcs.keyPressed != keyPressed) {
+      // When some of the functions are newly declared after the last call
+      // to pro.start(), the other functions are set to undefined.
+      if (funcs.setup == setup)
+        setup = undefined
+      if (funcs.draw == draw)
+        draw = undefined
+      if (funcs.mouseClicked == mouseClicked)
+        mouseClicked = undefined
+      if (funcs.keyPressed == keyPressed)
+        keyPressed = undefined
+
+      funcs.setup = setup
+      funcs.draw = draw
+      funcs.mouseClicked = mouseClicked
+      funcs.keyPressed = keyPressed
+    }
+  }
+
   callSetup(ctx, timestamp) {
+    this.checkFunctions()
     this.suspended = false
     this.startTime = timestamp
     this.canvas = ctx.canvas
@@ -217,6 +241,9 @@ Scriptorium.ProcessingCmd = class {
     this.canvas.onkeydown = event => {
       this.callKeyPressed(event.key)
     }
+
+    if (keyPressed instanceof Function && Scriptorium.isPC)
+      this.canvas.focus();
 
     if (setup instanceof Function) {
       this.setupProc(ctx)
