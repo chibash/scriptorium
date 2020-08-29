@@ -14,7 +14,7 @@ header {
     font-family: 'Arial', sans-serif;
     font-size: 24px;
     font-weight: bold;
-    padding-left: 30px;
+    padding-left: 60px;
     padding-top: 18px;
 }
 
@@ -35,6 +35,80 @@ a#logo-info:hover {
 a#logo-info:visited {
     color: #d0d0d0;
     text-decoration: none;
+}
+
+/* hamburger menu */
+#hmenu {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 22px;
+    left: 15px;
+    cursor: pointer;
+    display: block;
+}
+
+.hmenu_inner_line {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: white;
+    border-radius: 40px;
+    position: absolute;
+}
+
+.hmenu_inner_1 {
+    top: 0;
+}
+
+.hmenu_inner_2 {
+    top: 8px;
+}
+
+.hmenu_inner_3 {
+    top: 16px;
+}
+
+/* menu list */
+
+#nav {
+    position: absolute;
+    z-index: 10;
+    top: 50px;
+    left: -300px;
+    width: 300px;
+    padding: 0;
+    background: #3F51B5;
+    transition: .7s;
+}
+
+.in {
+    transform: translateX(100%);
+}
+
+#nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+#nav ul li {
+    list-style-type: none;
+    font-size: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+#nav a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    padding: 15px;
+    transition: .5s;
+}
+
+#nav li a:hover {
+    color: #ffffff;
+    background: blue;
+    border-bottom: none;
 }
 
 div#cells {
@@ -105,6 +179,31 @@ canvas#canvas:focus {
         font-size: 20px;
         padding-top: 25px;
         padding-right: 30px;
+    }
+
+    #hmenu {
+        top: 32px;
+    }
+
+    .hmenu_inner_line {
+        width: 30px;
+        height: 5px;
+    }
+
+    .hmenu_inner_1 {
+        top: 0;
+    }
+
+    .hmenu_inner_2 {
+        top: 12px;
+    }
+
+    .hmenu_inner_3 {
+        top: 24px;
+    }
+
+    #nav {
+        top: 100px;
     }
 
     .codebox {
