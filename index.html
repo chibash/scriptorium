@@ -30,12 +30,11 @@
 <nav id="nav">
   <ul>
     <li><a href="https://chibash.github.io/scriptorium/help.html">説明</a></li>
-    <li><a href="#">文字大</a></li>
-    <li><a href="#">文字小</a></li>
+    <li><a id="nav_font" href="#" onclick="Scriptorium.changeFontSize();">文字縮小</a></li>
   </ul>
 </nav>
 </nav>
-<div id="hmenu" onclick="document.getElementById('nav').classList.toggle('in');">
+<div id="hmenu" onclick="Scriptorium.toggleMenu()">
   <span class="hmenu_inner_line hmenu_inner_1" id="line1"></span>
   <span class="hmenu_inner_line hmenu_inner_2" id="line2"></span>
   <span class="hmenu_inner_line hmenu_inner_3" id="line3"></span>

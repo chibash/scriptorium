@@ -261,6 +261,24 @@ const Scriptorium = new class {
     }
   }
 
+  toggleMenu() {
+    document.getElementById('nav').classList.toggle('in');
+  }
+
+  changeFontSize() {
+    const menuItem = document.getElementById('nav_font');
+    if (document.body.className == 'small-font') {
+      document.body.classList.remove('small-font');
+      menuItem.innerHTML = '文字縮小';
+    }
+    else {
+      document.body.classList.add('small-font');
+      menuItem.innerHTML = '文字拡大';
+    }
+  
+    this.toggleMenu()
+  }
+
   escapeHTML(str) {
     let out = '';
     for (const c of str + '') {
