@@ -238,6 +238,7 @@ canvas#canvas:focus {
         border-radius: 15px 15px 15px 15px;
         border-style: none;
         transition: .4s;
+        touch-action: manipulation;
     }
 
     button.key {

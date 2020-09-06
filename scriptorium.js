@@ -245,7 +245,8 @@ const Scriptorium = new class {
     const out = document.getElementById(this.output_id);
     out.innerText = ''
     Scriptorium.turtleCmd.reset();
-    this.editorArea.focus();
+    if (this.isPC)
+      this.editorArea.focus();
   }
 
   save() {
@@ -268,7 +269,8 @@ const Scriptorium = new class {
 
   yank() {
     this.editorArea.getDoc().setValue(Scriptorium.running_src);
-    this.editorArea.focus();
+    if (this.isPC)
+      this.editorArea.focus();
   }
 
   paste() {
