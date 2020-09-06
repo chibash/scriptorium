@@ -22,13 +22,13 @@ const Scriptorium = new class {
     this.run_btn1_id = 'run_btn1'
     this.run_btn2_id = 'run_btn2'
 
-    this.editorArea = null;
-    this.consoleText = '';
-    this.class_name = 'scriptorium';
+    this.editorArea = null
+    this.consoleText = ''
+    this.class_name = 'scriptorium'
 
     this.isPC = !('ontouchend' in document)
     this.isSafari = new Error().line
-    this.running_src = null
+    this.running_src = ''
 
     this.ErrorLine = class {
       constructor(line, e) {
@@ -39,43 +39,46 @@ const Scriptorium = new class {
   }
 
   onload() {
-    const sample = '';
+    const sample = ''
 
-    const editor = document.getElementById(this.editor_id);
+    const keymap = { 'Tab': 'autocomplete' }
+    if (this.isPC)
+      keymap['Shift-Enter'] = function(cm){ Scriptorium.run(); }
+
+    const editor = document.getElementById(this.editor_id)
     this.editorArea = CodeMirror(editor, {
       mode: 'javascript',
       value: sample,
       lineNumbers: true,
       keyMap: 'emacs',
       matchBrackets: true,
-      extraKeys: { 'Shift-Enter': function(cm){ Scriptorium.run(); },
-                   'Tab': 'autocomplete' },
+      extraKeys: keymap,
       gutters: ["CodeMirror-lint-markers"],
       lint: { asi: true,
               esversion: 10 },
-    });
+    })
 
-    this.resizeCanvas();
-    this.editorArea.setSize('100%', '400px');
-    this.editorArea.focus();
+    this.resizeCanvas()
+    this.editorArea.setSize('100%', '400px')
+    this.editorArea.focus()
   }
 
   resizeCanvas() {
-    const editor = document.getElementById(this.editor_id);
-    let w = document.body.clientWidth - editor.clientWidth - 50;
-    let h = document.body.clientHeight - 100;
+    const editor = document.getElementById(this.editor_id)
+    let w = document.body.clientWidth - editor.clientWidth - 50
+    let h = document.body.clientHeight - 100
     if (h < w)
-      w = h;
+      w = h
 
     if (w < 400)
-      w = 690;
+      w = 690
 
-    const c = document.getElementById(this.canvas_id);
-    const ctx = c.getContext('2d');
-    const img = ctx.getImageData(0, 0, w, w);
-    c.width = w;
-    c.height = w;
-    ctx.putImageData(img, 0, 0);
+    const c = document.getElementById(this.canvas_id)
+    const ctx = c.getContext('2d')
+    const img = ctx.getImageData(0, 0, w, w)
+    c.width = w
+    c.height = w
+    ctx.putImageData(img, 0, 0)
   }
 
   /*
@@ -100,7 +103,7 @@ const Scriptorium = new class {
   run() {
     const src = this.editorArea.getDoc().getValue();
     if (src === '')
-      return;
+      return
 
     if (this.isSafari)
       this.evalSrc(src)
@@ -111,6 +114,7 @@ const Scriptorium = new class {
   evalSrc(src) {
     let success = true
     let result = null
+    Scriptorium.running_src = src
     const geval = eval
     try {
       // MDN web docs:
@@ -142,13 +146,13 @@ const Scriptorium = new class {
       const result = err === null ? msg : err
       Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line, result))
       Scriptorium.postRun(Scriptorium.running_src, false, new this.ErrorLine(line, result))
-      return false;   // call the default error handler
+      return false   // call the default error handler
     }
 
     Scriptorium.running_src = src
-    const s = document.createElement('script');
+    const s = document.createElement('script')
     s.innerHTML = '{ ' + src + '\n ;\n}\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
-    document.body.appendChild(s);
+    document.body.appendChild(s)
   }
 
   postRun(src, success, result) {
@@ -192,6 +196,7 @@ const Scriptorium = new class {
       cells.innerHTML += this.escapeHTML(this.getResultingMessage(result))
 
     cells.innerHTML += '</p>'
+    cells.onclick = (ev) => { ev.target.focus() }
     if (success) {
       const editor = this.editorArea
       if (editor.getDoc().getValue() == src)
@@ -259,6 +264,16 @@ const Scriptorium = new class {
       this.editorArea.getDoc().setValue(JSON.parse(program));
       this.editorArea.focus();
     }
+  }
+
+  yank() {
+    this.editorArea.getDoc().setValue(Scriptorium.running_src);
+    this.editorArea.focus();
+  }
+
+  paste() {
+    this.editorArea.focus();
+    document.execCommand("paste");
   }
 
   toggleMenu() {

@@ -84,7 +84,7 @@ a#logo-info:visited {
     width: 300px;
     padding: 0;
     background: #3F51B5;
-    transition: .7s;
+    transition: .3s;
 }
 
 .in {
@@ -107,7 +107,6 @@ a#logo-info:visited {
     text-decoration: none;
     color: white;
     padding: 15px;
-    transition: .5s;
 }
 
 #nav li a:hover {

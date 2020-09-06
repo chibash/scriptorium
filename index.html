@@ -52,16 +52,16 @@
   <input type="button" value="消去" onclick="Scriptorium.reset()"/>
   <input type="button" id="run_btn1" value="実行" onclick="Scriptorium.run()"/>
   &nbsp;
-  <input type="button" value="保存" onclick="Scriptorium.save()"/>
-  <input type="button" value="読込" onclick="Scriptorium.load()"/>
+  <input type="button" value="復元" onclick="Scriptorium.yank()"/>
+  <input type="button" value="貼付" onclick="Scriptorium.paste()"/>
   <br/>
 
   <div style="float: left;">
    <div id="editor"></div>
    <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <button class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</button>
-   <button class="btn-smallscreen" onclick="Scriptorium.save()">保存</button>
-   <button class="btn-smallscreen" onclick="Scriptorium.load()">読込</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.yank()">復元</button>
+<button class="btn-smallscreen" onclick="Scriptorium.paste()">貼付</button>
    <br/>
    <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
    </div>
