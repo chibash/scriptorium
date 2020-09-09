@@ -1,0 +1,40 @@
+<html>                                                                         
+<head>                                                                         
+  <meta charset="UTF-8"/>                                                      
+  <title>Scriptorium</title>
+  <link rel="stylesheet" href="scriptorium.css">  
+</head>
+<body>
+  <header>
+    <br/><span id="logo">Scriptorium</span>
+    <a id="logo-info" href="https://github.com/chibash/scriptorium">github.com/chibash/scriptorium</a>
+  </header>
+
+<div class="helpdoc">
+<h3>プログラム例</h3>
+
+<p>
+<pre class="codebox">
+function draw() {
+  pro.background(white)
+  const red = pro.mouseX * 255 / pro.width     // 赤
+  const green = pro.mouseY * 255 / pro.height  // 緑
+  for (const i of range(6)) {
+    pro.noStroke()                             // 線なし
+    pro.fill(pro.color(red, green, i * 40))    // 色を指定
+    pro.circle(i * 60 + 30, 100, 15)           // 円を描く
+  }
+}
+  
+pro.start()
+</pre>
+</p>
+
+</div>
+
+  <footer>
+    <a href="./index.html">戻る</a>
+  </footer>
+</body>
+</html>
+
