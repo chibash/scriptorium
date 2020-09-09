@@ -60,7 +60,7 @@ Scriptorium.Processing = class {
       else if (v > 255)
         return 255
       else
-        return v
+        return Math.floor(v)
     }
     const green = args[0] || red
     const blue = args[1] || red
@@ -123,7 +123,7 @@ Scriptorium.Processing = class {
       if (this.penWithFill)
         this.pen.fill()
 
-        if (this.penWithStroke)
+      if (this.penWithStroke)
         this.pen.stroke()
     }
   }
