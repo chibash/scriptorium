@@ -21,6 +21,12 @@ header {
     font-weight: bold;
     padding-left: 60px;
     padding-top: 18px;
+    text-decoration: none;
+}
+
+#logo:visited {
+    text-decoration: none;
+    color: white;
 }
 
 #logo-info {
@@ -162,8 +168,8 @@ canvas#canvas:focus {
 
 footer {
     font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
-    font-size: 16px;
-    height: 30px;
+    font-size: 12px;
+    padding-top: 50px;
     margin: 20px;
 }
 
