@@ -108,6 +108,23 @@ a#logo-info:visited {
     font-family: 'Arial', sans-serif;
 }
 
+#nav input {
+    font-size: 20px;
+    color: #d0d0d0;
+    background: #3F51B5;
+    border: 0;
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+#nav input:focus {
+    outline: 0 white solid;
+}
+
+#nav label {
+    padding: 0px;
+}
+
 #nav a {
     display: block;
     text-decoration: none;
@@ -117,7 +134,7 @@ a#logo-info:visited {
 
 #nav li a:hover {
     color: #ffffff;
-    background: blue;
+    background: #293575;
     border-bottom: none;
 }
 

@@ -12,6 +12,8 @@ Scriptorium.Msg.save = '今編集中のプログラムを保存しますか？\n
                        '以前保存したプログラムは消去されます。'
 Scriptorium.Msg.load = '保存済みのプログラムを開きますか？\n' +
                        '今編集中のプログラムは消去されます。'
+Scriptorium.Msg.zoomIn = '文字拡大'
+Scriptorium.Msg.zoomOut = '文字縮小'
 
 // for turtle.js
 

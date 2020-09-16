@@ -14,6 +14,10 @@ function* range(from, to=null) {
 const Scriptorium = new class {
   constructor() {
     // HTML elements' ID
+    this.filename_id = 'filename'
+    this.zoom_id = 'zoom_inout'
+    this.chooser_id = 'filechooser'
+    this.downloader_id = 'downloader'
     this.cells_id = 'cells'
     this.editor_id = 'editor'
     this.output_id = 'output'
@@ -57,6 +61,13 @@ const Scriptorium = new class {
       lint: { asi: true,
               esversion: 10 },
     })
+
+    const zoomInOut = document.getElementById(this.zoom_id);
+    zoomInOut.innerHTML = Scriptorium.Msg.zoomOut;
+    const filechooser = document.getElementById(this.chooser_id)
+    filechooser.onchange = (evt) => { this.readTextFile(evt.target.files[0]) }
+    const downloader = document.getElementById(this.downloader_id)
+    downloader.onmousedown = () => { this.makeDownloadLink() }
 
     this.resizeCanvas()
     this.editorArea.setSize('100%', '400px')
@@ -283,16 +294,36 @@ const Scriptorium = new class {
   }
 
   changeFontSize() {
-    const menuItem = document.getElementById('nav_font');
+    const menuItem = document.getElementById(Scriptorium.zoom_id)
     if (document.body.className == 'small-font') {
-      document.body.classList.remove('small-font');
-      menuItem.innerHTML = '文字縮小';
+      document.body.classList.remove('small-font')
+      menuItem.innerHTML = Scriptorium.Msg.zoomOut
     }
     else {
-      document.body.classList.add('small-font');
-      menuItem.innerHTML = '文字拡大';
+      document.body.classList.add('small-font')
+      menuItem.innerHTML = Scriptorium.Msg.zoomIn
     }
   
+    this.toggleMenu()
+  }
+
+  readTextFile(f) {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      this.editorArea.getDoc().setValue(event.target.result)
+      this.editorArea.focus()
+    }
+    reader.readAsText(f)
+    this.toggleMenu()
+  }
+
+  makeDownloadLink() {
+    const program = this.editorArea.getDoc().getValue()
+    const blob = new Blob([program], { 'type' : 'text/plain' })
+    window.URL.revokeObjectURL(downloader.href)
+    downloader.href = window.URL.createObjectURL(blob)
+    const filename = document.getElementById(Scriptorium.filename_id)
+    downloader.download = filename.value
     this.toggleMenu()
   }
 
