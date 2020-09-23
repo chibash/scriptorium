@@ -139,7 +139,7 @@ a#logo-info:visited {
 }
 
 div#cells {
-    font-family: 'Courier', monospace;
+    font-family: Courier, monospace;
     margin-left: 45px;
 }
 
@@ -147,6 +147,7 @@ div#cells {
     padding: 5px;
     width: 635px;
     border: 1px solid gray;
+    font-family: Menlo, Monaco, Courier, monospace;
 }
 
 button.btn-smallscreen {
@@ -165,7 +166,7 @@ div#editor {
 }
 
 .CodeMirror {
-    font-family: 'Courier', monospace;
+    font-family: Menlo, Monaco, Courier, monospace;
 }
 
 canvas#canvas {
