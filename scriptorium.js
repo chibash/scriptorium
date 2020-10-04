@@ -34,6 +34,8 @@ const Scriptorium = new class {
     this.isSafari = new Error().line
     this.running_src = ''
 
+    this.audioContext = null
+
     this.ErrorLine = class {
       constructor(line, e) {
         this.line = line ? line : '?'
@@ -44,6 +46,11 @@ const Scriptorium = new class {
 
   onload() {
     const sample = ''
+
+    this.audioContext = function(win) {
+      const AudioContext = win.AudioContext || win.webkitAudioContext
+      return AudioContext ? new AudioContext() : null
+    }(window)
 
     const keymap = { 'Tab': 'autocomplete' }
     if (this.isPC)

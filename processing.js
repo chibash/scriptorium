@@ -165,6 +165,12 @@ Scriptorium.Processing = class {
       }
     }
   }
+
+  beep(...args) {
+    const freq = args[0] || 440
+    const length = args[1] || 100 /* msec */
+    this.processingCmd.turtleCmd.startBeep(freq, length)
+  }
 }
 
 Scriptorium.ProcessingCmd = class {

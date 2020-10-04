@@ -297,6 +297,50 @@ Scriptorium.End = class {
   }
 }
 
+Scriptorium.Beeper = class {
+  constructor () {
+    this.oscillator = null
+    this.beepStopTime = -1
+    this.beepOn = null
+  }
+
+  startBeep(freqency, duration) {
+    this.beepOn = [freqency, duration]
+  }
+
+  stopBeep() {
+    if (this.oscillator)
+      this.oscillator.stop()
+
+    this.oscillator = null
+    this.beepStopTime = -1
+    this.beepOn = null
+  }
+
+  checkBeep(timestamp) {
+    if (this.oscillator && timestamp > this.beepStopTime)
+      this.stopBeep()
+
+    if (this.beepOn) {
+      const ctx = Scriptorium.audioContext
+      if (!this.oscillator && ctx) {
+        const gainNode = ctx.createGain()
+        gainNode.gain.value = 0.5    // audio gain
+        const oscillator = ctx.createOscillator()
+        oscillator.type = "sine"     // square, sawtooth, triangle
+        oscillator.frequency.value = this.beepOn[0]
+        oscillator.connect(gainNode).connect(ctx.destination);
+        oscillator.start()
+        this.oscillator = oscillator
+        this.beepStopTime = timestamp + this.beepOn[1]
+      }
+
+      this.beepOn = null
+    }
+  }
+
+}
+
 Scriptorium.TurtleCmd = class {
   constructor() {
     this.commands = []
@@ -305,6 +349,7 @@ Scriptorium.TurtleCmd = class {
     this.running = false
     this.isProcessing = false
     this.processingCmd = new Scriptorium.ProcessingCmd(this)
+    this.beeper = new Scriptorium.Beeper()
   }
 
   getProcessing() { return this.processingCmd.processing }
@@ -333,6 +378,11 @@ Scriptorium.TurtleCmd = class {
   // callback from processing.js
   pushStartProcessing() {
     this.push(new Scriptorium.StartProcessing())
+  }
+
+  // callback from processing.js
+  startBeep(freqency, duration) {
+    this.beeper.startBeep(freqency, duration)
   }
 
   pushAlert(msg) {
@@ -406,6 +456,7 @@ Scriptorium.TurtleCmd = class {
     let index = 0
     let cmd = this.commands[index++]
     let callback = (timestamp) => {
+      this.beeper.checkBeep(timestamp)
       if (this.running)
         if (cmd.run(this, ctx, timestamp) || this.commands.length < 1) {
           if (index < this.commands.length) {
@@ -431,6 +482,7 @@ Scriptorium.TurtleCmd = class {
     this.commands = []
     this.isProcessing = false
     this.running = false
+    this.beeper.stopBeep()
     this.processingCmd.suspend()
   }
 
