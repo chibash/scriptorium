@@ -147,7 +147,7 @@ div#cells {
     padding: 5px;
     width: 635px;
     border: 1px solid gray;
-    font-family: Menlo, Monaco, Courier, monospace;
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 button.btn-smallscreen {
@@ -166,7 +166,7 @@ div#editor {
 }
 
 .CodeMirror {
-    font-family: Menlo, Monaco, Courier, monospace;
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 canvas#canvas {
