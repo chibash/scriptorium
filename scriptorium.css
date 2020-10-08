@@ -66,6 +66,7 @@ a#logo-info:visited {
     background: white;
     border-radius: 40px;
     position: absolute;
+    transition: .3s;
 }
 
 .hmenu_inner_1 {
@@ -78,6 +79,20 @@ a#logo-info:visited {
 
 .hmenu_inner_3 {
     top: 16px;
+}
+
+#hmenu.in > .hmenu_inner_1 {
+    top: 8px;
+    transform: rotate(45deg);
+}
+
+#hmenu.in > .hmenu_inner_2 {
+    opacity: 0;
+}
+
+#hmenu.in > .hmenu_inner_3 {
+    top: 8px;
+    transform: rotate(-45deg);
 }
 
 /* menu list */
@@ -93,7 +108,7 @@ a#logo-info:visited {
     transition: .3s;
 }
 
-.in {
+#nav.in {
     transform: translateX(100%);
 }
 

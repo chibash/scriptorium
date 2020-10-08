@@ -298,6 +298,7 @@ const Scriptorium = new class {
 
   toggleMenu() {
     document.getElementById('nav').classList.toggle('in');
+    document.getElementById('hmenu').classList.toggle('in');
   }
 
   changeFontSize() {
