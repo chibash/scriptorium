@@ -4,24 +4,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=0.52">
   <title>Scriptorium</title>
   <link rel="icon" href="./favicon.ico" />
-  <script src="lib/codemirror.js"></script>
+
   <link rel="stylesheet" href="lib/codemirror.css">
   <link rel="stylesheet" href="addon/hint/show-hint.css">
   <link rel="stylesheet" href="addon/lint/lint.css">
-  <script src="mode/javascript/javascript.js"></script>
-  <script src="addon/edit/matchbrackets.js"></script>
-  <script src="addon/hint/show-hint.js"></script>
-  <script src="addon/hint/javascript-hint.js"></script>
-  <script src="keymap/emacs.js"></script>
-  <script src="./jshint.js"></script>
-  <script src="addon/lint/lint.js"></script>
-  <script src="addon/lint/javascript-lint.js"></script>
-
   <link rel="stylesheet" href="scriptorium.css">
-  <script src="./scriptorium.js"></script>
-  <script src="./processing.js"></script>
-  <script src="./turtle.js"></script>
-  <script src="./messages.js"></script>
 </head>
 
 <body onresize="Scriptorium.resizeCanvas();">
@@ -68,7 +55,7 @@
    <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <button class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</button>
    <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
-<button class="btn-smallscreen" onclick="Scriptorium.paste()">貼付</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.paste()">貼付</button>
    <br/>
    <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
    </div>
@@ -91,5 +78,21 @@
 
 <div id="bottom" style="height: 10px;"></div>
 
+
+<script src="lib/codemirror.js"></script>
+<script src="mode/javascript/javascript.js"></script>
+<script src="addon/edit/matchbrackets.js"></script>
+<script src="addon/hint/show-hint.js"></script>
+<script src="addon/hint/javascript-hint.js"></script>
+<script src="keymap/emacs.js"></script>
+<script src="./jshint.js"></script>
+<script src="addon/lint/lint.js"></script>
+<script src="addon/lint/javascript-lint.js"></script>
+
+
+<script src="./scriptorium.js"></script>
+<script src="./processing.js"></script>
+<script src="./turtle.js"></script>
+<script src="./messages.js"></script>
 </body>
 </html>
