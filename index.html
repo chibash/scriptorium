@@ -38,7 +38,7 @@
 
 <input type="file" id="filechooser" style="display: none;"/>
 
-<div style="margin-left: 10px; margin-bottom: 0px">
+<div style="margin-left: 10px; margin-bottom: 0px;">
   <div id="cells">
   </div>
 
@@ -47,7 +47,7 @@
   <input type="button" id="run_btn1" value="実行" onclick="Scriptorium.run()"/>
   &nbsp;
   <input type="button" value="再編集" onclick="Scriptorium.yank()"/>
-  <input type="button" value="貼付" onclick="Scriptorium.paste()"/>
+  <input type="button" value="新規" onclick="Scriptorium.clearSource()"/>
   <br/>
 
   <div style="float: left;">
@@ -55,7 +55,7 @@
    <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <button class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</button>
    <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
-   <button class="btn-smallscreen" onclick="Scriptorium.paste()">貼付</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.clearSource()">新規</button>
    <br/>
    <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
    </div>
@@ -76,7 +76,7 @@
   <div style="clear: both;"></div>
 </div>
 
-<div id="bottom" style="height: 10px;"></div>
+<div id="bottom"></div>
 
 
 <script src="lib/codemirror.js"></script>

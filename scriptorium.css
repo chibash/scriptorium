@@ -154,8 +154,14 @@ a#logo-info:visited {
 }
 
 div#cells {
-    font-family: Courier, monospace;
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
     margin-left: 45px;
+}
+
+div#output {
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    margin-left: 30px;
+    margin-bottom: 10px;
 }
 
 .codebox {
@@ -163,6 +169,11 @@ div#cells {
     width: 635px;
     border: 1px solid gray;
     font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 15px;
+}
+
+.codebox:focus {
+    outline: 0px solid gray;
 }
 
 button.btn-smallscreen {
@@ -192,6 +203,10 @@ canvas#canvas {
 
 canvas#canvas:focus {
     outline: 1px solid lightgray;
+}
+
+div#bottom {
+    height: 10px;
 }
 
 .helpdoc {

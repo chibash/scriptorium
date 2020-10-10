@@ -291,9 +291,10 @@ const Scriptorium = new class {
       this.editorArea.focus();
   }
 
-  paste() {
-    this.editorArea.focus();
-    document.execCommand("paste");
+  clearSource() {
+    this.editorArea.getDoc().setValue('')
+    if (this.isPC)
+      this.editorArea.focus();
   }
 
   toggleMenu() {

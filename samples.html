@@ -14,7 +14,7 @@
 <h3>プログラム例</h3>
 
 <p>
-<pre class="codebox">
+<textarea id="code01">
 function draw() {
   pro.background(white)
   const red = pro.mouseX * 255 / pro.width     // 赤
@@ -25,16 +25,181 @@ function draw() {
     pro.circle(i * 60 + 30, 100, 15)           // 円を描く
   }
 }
-  
+
 pro.start()
-</pre>
+</textarea><br/>
+<input type="button" value="コピー" onclick="copyCode('code01')"/>
 </p>
 
+<p><textarea id="code02">
+// 二つのボールを表す大域変数の宣言    
+let b1 = { x: 200, y: 100, dx: 10, dy: 10 }
+let b2 = { x: 100, y: 300, dx: 5, dy: -10 }
+  
+// move 関数の宣言
+function move(ball) {
+  ball.x = ball.x + ball.dx  // プロパティ x の値を変更
+  ball.y = ball.y + ball.dy
+  if (ball.x < 0) {          // 左右の壁に当たったときの処理
+    ball.x = -ball.x
+    ball.dx = -ball.dx
+  } else if (ball.x > pro.width) {
+    ball.x = pro.width * 2 - ball.x
+    ball.dx = -ball.dx
+  }
+  
+  if (ball.y < 0) {          // 上下の壁に当たったときの処理
+    ball.y = -ball.y
+    ball.dy = -ball.dy
+  } else if (ball.y > pro.height) {
+    ball.y = pro.height * 2 - ball.y
+    ball.dy = -ball.dy
+  }
+}
+  
+// draw 関数の宣言
+function draw() {
+  pro.background(white)
+  move(b1)                   // b1 のプロパティを更新
+  pro.circle(b1.x, b1.y, 5)  // 一つ目のボールを描く
+  move(b2)                   // b2 のプロパティを更新
+  pro.circle(b2.x, b2.y, 5)  // 二つ目のボールを描く
+}
+  
+pro.frameRate(20)    // 毎秒 20 フレームに設定
+pro.start()          // 動画の開始
+</textarea><br/>
+<input type="button" value="コピー" onclick="copyCode('code02')"/>
+</p>
+
+<p><textarea id="code03">
+let b1 = { x: 200, y: 150, dx: 5, dy: 5 }
+let b2 = { x: 100, y: 300, dx: 5, dy: -10 }
+let paddle = { x: 100, dx: 10, width: 100, height: 5 }
+let blocks = []
+
+const blockHeight = 10
+const blockWidth = 40
+
+for (const i of range(6)) {
+  for (const j of range(3)) {
+    blocks[i * 3 + j] = { x: 10 + i * 60, y: 50 + j * 20, visible: true }
+  }
+}
+
+function drawBlocks(blks) {
+  for (const b of blks) {
+    if (b.visible) {
+      pro.rect(b.x, b.y, blockWidth, blockHeight)
+    }
+  }
+}
+
+function checkBlocks(blks, ball) {
+  for (const b of blks) {
+    if (b.visible)
+      if (checkCollision(b, blockWidth, 0, ball) ||
+          checkCollision(b, blockWidth, blockHeight, ball)) {
+      b.visible = false
+      ball.dy = -ball.dy
+      pro.beep(880)
+    }
+  }
+}
+
+function noBlocks(blks) {
+  for (const b of blks) {
+      if (b.visible)
+        return false
+    }
+
+  return true
+}
+
+function checkCollision(blk, w, yOffset, ball) {
+  return crossingDots(blk.x, blk.y + yOffset, blk.x + w, blk.y + yOffset,
+                      ball.x, ball.y, ball.x - ball.dx, ball.y - ball.dy)
+}
+
+function crossingDots(ax, ay, bx, by, x0, y0, x1, y1) {
+  return crossLine(ax, ay, bx, by, x0, y0, x1, y1) &&
+          crossLine(x0, y0, x1, y1, ax, ay, bx, by)
+}
+
+function crossLine(ax, ay, bx, by, x0, y0, x1, y1) {
+  const s = (x0 - x1) * (ay - y1) - (y0 - y1) * (ax - x1)
+  const t = (x0 - x1) * (by - y1) - (y0 - y1) * (bx - x1)
+  return s * t <= 0
+}
+
+function moveBall(ball, pad) {
+  ball.x = ball.x + ball.dx
+  ball.y = ball.y + ball.dy
+  if (ball.x < 0) {
+    ball.x = -ball.x
+    ball.dx = -ball.dx
+  } else if (ball.x > pro.width) {
+    ball.x = pro.width * 2 - ball.x
+    ball.dx = -ball.dx
+  }
+
+  if (ball.y < 0) {
+    ball.y = -ball.y
+    ball.dy = -ball.dy
+  } else if (ball.y > pro.height - pad.height) {
+    if (pad.x <= ball.x && ball.x <= pad.x + pad.width) {
+      ball.y = (pro.height - pad.height) * 2 - ball.y
+      ball.dy = -ball.dy
+      ball.dx = ball.dx + (ball.x - (pad.x + pad.width / 2)) / 5
+      pro.beep()
+    }
+  }
+}
+
+function movePaddle(pad) {
+  if (pro.mouseX < pad.x) {
+    pad.x = pad.x - pad.dx
+  } else if (pad.x + pad.dx < pro.mouseX) {
+    pad.x = pad.x + pad.dx
+  }
+}
+
+function draw() {
+  pro.background(white)
+  movePaddle(paddle)
+  pro.rect(paddle.x, pro.height - paddle.height,
+            paddle.width, paddle.height)
+  moveBall(b1, paddle)
+  // moveBall(b2, paddle)
+  checkBlocks(blocks, b1)
+  drawBlocks(blocks)
+  pro.circle(b1.x, b1.y, 5)
+  // pro.circle(b2.x, b2.y, 5)
+  if (noBlocks(blocks)) {
+    pro.stop()
+  }
+
+  if (b1.y > pro.height) {
+    b1.dy = -b1.dy
+    // pro.stop()
+  }
+  if (b2.y > pro.height) {
+    b2.dy = -b2.dy
+  }
+}
+
+pro.frameRate(20)
+pro.start()
+</textarea><br/>
+<input type="button" value="コピー" onclick="copyCode('code03')"/>
+</p>
 </div>
 
-  <footer>
+<footer>
     Copyright (C) 2019 Shigeru Chiba.
-  </footer>
+</footer>
+
+<script src="./sample.js"></script>
 </body>
 </html>
 
