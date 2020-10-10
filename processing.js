@@ -193,6 +193,8 @@ Scriptorium.ProcessingCmd = class {
     this.suspended = true
     this.processing.pen = null
     if (this.canvas) {
+      this.canvas.touchstart = null
+      this.canvas.touchmove = null
       this.canvas.onmousemove = null
       this.canvas.onclick = null
       this.canvas.onkeydown = null
@@ -238,10 +240,16 @@ Scriptorium.ProcessingCmd = class {
     this.canvas.onclick = event => {
       pr.mouseX = event.offsetX
       pr.mouseY = event.offsetY
-      if (mouseClicked instanceof Function) {
-        this.setupProc(this.canvas.getContext('2d'))
-        mouseClicked()
-      }
+      this.callMouseClicked()
+    }
+
+    this.canvas.ontouchmove = event => {
+      this.setTouchPosition(event)
+    }
+
+    this.canvas.ontouchstart = event => {
+      this.setTouchPosition(event)
+      this.callMouseClicked()
     }
 
     this.canvas.onkeydown = event => {
@@ -255,6 +263,25 @@ Scriptorium.ProcessingCmd = class {
       this.setupProc(ctx)
       this.processing.frameCount += 1
       setup()
+    }
+  }
+
+  callMouseClicked() {
+    if (mouseClicked instanceof Function) {
+      this.setupProc(this.canvas.getContext('2d'))
+      mouseClicked()
+    }
+  }
+
+  setTouchPosition(event) {
+    event.preventDefault()
+    const touches = event.changedTouches
+    if (touches.length > 0) {
+      const rect = event.target.getBoundingClientRect()
+      const offsetX = touches[0].clientX - window.pageXOffset - rect.left
+      const offsetY = touches[0].clientY - window.pageYOffset - rect.top
+      this.processing.mouseX = offsetX
+      this.processing.mouseY = offsetY
     }
   }
 
