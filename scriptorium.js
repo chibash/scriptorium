@@ -119,6 +119,7 @@ const Scriptorium = new class {
   */
 
   run() {
+    this.turtleCmd.beeper.enableBeep()    // for Safari
     const src = this.editorArea.getDoc().getValue();
     if (src === '')
       return

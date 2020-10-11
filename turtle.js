@@ -304,7 +304,7 @@ Scriptorium.Beeper = class {
     this.beepOn = null
   }
 
-  startBeep(freqency, duration) {
+  startBeep(freqency, duration) {   // Hz, msec.
     this.beepOn = [freqency, duration]
   }
 
@@ -322,23 +322,32 @@ Scriptorium.Beeper = class {
       this.stopBeep()
 
     if (this.beepOn) {
-      const ctx = Scriptorium.audioContext
-      if (!this.oscillator && ctx) {
-        const gainNode = ctx.createGain()
-        gainNode.gain.value = 0.5    // audio gain
-        const oscillator = ctx.createOscillator()
-        oscillator.type = "sine"     // square, sawtooth, triangle
-        oscillator.frequency.value = this.beepOn[0]
-        oscillator.connect(gainNode).connect(ctx.destination);
-        oscillator.start()
-        this.oscillator = oscillator
-        this.beepStopTime = timestamp + this.beepOn[1]
-      }
-
+      this.startOscillator(this.beepOn[0], 0.5, timestamp + this.beepOn[1])
       this.beepOn = null
     }
   }
 
+  enableBeep() {
+    // Safari does not allow to play a sound until a click event handler
+    // directly play a sound.  So we play a very short beep sound.
+    this.startOscillator(440, 0.0, -1)
+    this.stopBeep()
+  }
+
+  startOscillator(freq, gain, stopTime) {
+    const ctx = Scriptorium.audioContext
+    if (!this.oscillator && ctx) {
+      const gainNode = ctx.createGain()
+      gainNode.gain.value = gain   // audio gain
+      const oscillator = ctx.createOscillator()
+      oscillator.type = "sine"     // square, sawtooth, triangle
+      oscillator.frequency.value = freq
+      oscillator.connect(gainNode).connect(ctx.destination);
+      oscillator.start()
+      this.oscillator = oscillator
+      this.beepStopTime = stopTime
+    }
+  }
 }
 
 Scriptorium.TurtleCmd = class {
