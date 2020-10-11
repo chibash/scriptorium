@@ -1,8 +1,10 @@
 <html>                                                                         
 <head>                                                                         
-  <meta charset="UTF-8"/>                                                      
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=0.52">
   <title>Scriptorium</title>
-  <link rel="stylesheet" href="scriptorium.css">  
+  <link rel="icon" href="./favicon.ico" />
+  <link rel="stylesheet" href="scriptorium.css">
 </head>
 <body>
   <header>
@@ -27,9 +29,7 @@ function draw() {
 }
 
 pro.start()
-</textarea><br/>
-<input type="button" value="コピー" onclick="copyCode('code01')"/>
-</p>
+</textarea></p>
 
 <p><textarea id="code02">
 // 二つのボールを表す大域変数の宣言    
@@ -68,9 +68,7 @@ function draw() {
   
 pro.frameRate(20)    // 毎秒 20 フレームに設定
 pro.start()          // 動画の開始
-</textarea><br/>
-<input type="button" value="コピー" onclick="copyCode('code02')"/>
-</p>
+</textarea></p>
 
 <p><textarea id="code03">
 let b1 = { x: 200, y: 150, dx: 5, dy: 5 }
@@ -190,16 +188,14 @@ function draw() {
 
 pro.frameRate(20)
 pro.start()
-</textarea><br/>
-<input type="button" value="コピー" onclick="copyCode('code03')"/>
-</p>
+</textarea></p>
 </div>
 
 <footer>
     Copyright (C) 2019 Shigeru Chiba.
 </footer>
 
-<script src="./sample.js"></script>
+<script src="./samples.js"></script>
 </body>
 </html>
 

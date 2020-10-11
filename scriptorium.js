@@ -179,7 +179,7 @@ const Scriptorium = new class {
 
     const btn1 = document.getElementById(this.run_btn1_id)
     const btn2 = document.getElementById(this.run_btn2_id)
-    btn1.value = btn2.innerHTML = Scriptorium.Msg.stop
+    btn1.innerHTML = btn2.innerHTML = Scriptorium.Msg.stop
     btn1.onclick = btn2.onclick = (ev) => { Scriptorium.stopRunning() }
 
     const canvas = document.getElementById(this.canvas_id)
@@ -248,7 +248,7 @@ const Scriptorium = new class {
   changeStopButton() {
     const btn1 = document.getElementById(this.run_btn1_id)
     const btn2 = document.getElementById(this.run_btn2_id)
-    btn1.value = btn2.innerHTML = Scriptorium.Msg.run
+    btn1.innerHTML = btn2.innerHTML = Scriptorium.Msg.run
     btn1.onclick = btn2.onclick = (ev) => { Scriptorium.run() }
   }
 

@@ -24,7 +24,7 @@ header {
     text-decoration: none;
 }
 
-#logo:visited {
+#logo:visited, #logo:link {
     text-decoration: none;
     color: white;
 }
@@ -35,6 +35,11 @@ header {
     float: right;
     padding-top: 10px;
     padding-right: 30px;
+    color: white;
+    text-decoration: none;
+}
+
+a#logo-info:link {
     color: white;
     text-decoration: none;
 }
@@ -181,9 +186,21 @@ button.btn-smallscreen {
     font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
 }
 
-input[type="button"] {
-    font-size: 16px;
+button.btn-normal {
+    font-size: 15px;
     font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+    color: #444444;
+    text-decoration: none;
+    background-color: white;
+    border-radius: 8px;
+    border-style: solid;
+    margin: 3px;
+    transition: .4s;
+    touch-action: manipulation;
+}
+
+button.btn-normal:hover {
+    background-color: #e0e0e0;
 }
 
 div#editor {
@@ -280,10 +297,10 @@ footer {
         border: 2px solid gray;
     }
 
-    input[type="button"] {
+    button.btn-normal {
         display: none;
     }
-
+ 
     div#editor {
         border: 2px solid gray;
     }

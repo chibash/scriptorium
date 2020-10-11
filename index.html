@@ -43,17 +43,18 @@
   </div>
 
   <br/>
-  <input type="button" value="消去" onclick="Scriptorium.reset()"/>
-  <input type="button" id="run_btn1" value="実行" onclick="Scriptorium.run()"/>
+  <div style="margin-left: 50px; margin-bottom: 3px;">
+  <button class="btn-normal" id="run_btn1" onclick="Scriptorium.run()">実行</button>
+  <button class="btn-normal" onclick="Scriptorium.reset()">消去</button>
   &nbsp;
-  <input type="button" value="再編集" onclick="Scriptorium.yank()"/>
-  <input type="button" value="新規" onclick="Scriptorium.clearSource()"/>
-  <br/>
+  <button class="btn-normal" onclick="Scriptorium.yank()">再編集</button>
+  <button class="btn-normal" onclick="Scriptorium.clearSource()">新規</button>
+  </div>
 
   <div style="float: left;">
    <div id="editor"></div>
-   <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <button class="btn-smallscreen" id="run_btn2" onclick="Scriptorium.run()">実行</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
    <button class="btn-smallscreen" onclick="Scriptorium.clearSource()">新規</button>
    <br/>
