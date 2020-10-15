@@ -194,9 +194,14 @@ button.btn-normal {
     background-color: white;
     border-radius: 8px;
     border-style: solid;
-    margin: 3px;
     transition: .4s;
     touch-action: manipulation;
+
+    width: 6em;
+    height: 2em;
+    margin: 5px 0 5px 5px;
+    padding: 0.2em 1em 0.1em;
+    text-align: center;
 }
 
 button.btn-normal:hover {
