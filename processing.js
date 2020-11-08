@@ -171,6 +171,16 @@ Scriptorium.Processing = class {
     const length = args[1] || 100 /* msec */
     this.processingCmd.turtleCmd.startBeep(freq, length)
   }
+
+  crossing(ax, ay, bx, by, x0, y0, x1, y1) {
+    function crossLine(ax, ay, bx, by, x0, y0, x1, y1) {
+      const s = (x0 - x1) * (ay - y1) - (y0 - y1) * (ax - x1)
+      const t = (x0 - x1) * (by - y1) - (y0 - y1) * (bx - x1)
+      return s * t <= 0
+    }
+    return crossLine(ax, ay, bx, by, x0, y0, x1, y1) &&
+           crossLine(x0, y0, x1, y1, ax, ay, bx, by)
+  }
 }
 
 Scriptorium.ProcessingCmd = class {
