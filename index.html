@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=0.52">
   <title>Scriptorium</title>
-  <link rel="icon" href="./favicon.ico" />
+  <link rel="icon" href="./favicon.ico">
 
   <link rel="stylesheet" href="lib/codemirror.css">
   <link rel="stylesheet" href="addon/hint/show-hint.css">
@@ -14,10 +15,10 @@
 <body onresize="Scriptorium.resizeCanvas();">
 
 <header>
-<br/>
+<br>
 <nav id="nav">
   <ul>
-    <li><input id="filename" spellcheck="false" type="text" value="untitled.js"/></li>
+    <li><input id="filename" spellcheck="false" type="text" value="untitled.js"></li>
     <li><a href="./help.html">使い方</a></li>
     <li><a href="./samples.html">プログラム例</a></li>
     <li><a id="zoom_inout" href="#" onclick="Scriptorium.changeFontSize();">zoom out</a></li>
@@ -32,17 +33,17 @@
   <span class="hmenu_inner_line hmenu_inner_3" id="line3"></span>
 </div>
 <span id="logo">Scriptorium</span>
-<a id="logo-info" href="./help.html">help</a>
+<a id="logo-info" href="./help.html">Help</a>
 <a id="logo-info" href="https://github.com/chibash/scriptorium">github.com/chibash/scriptorium</a>
 </header>
 
-<input type="file" id="filechooser" style="display: none;"/>
+<input type="file" id="filechooser" style="display: none;">
 
 <div style="margin-left: 10px; margin-bottom: 0px;">
   <div id="cells">
   </div>
 
-  <br/>
+  <br>
   <div style="margin-left: 50px; margin-bottom: 3px;">
   <button class="btn-normal" id="run_btn1" onclick="Scriptorium.run()">実行</button>
   <button class="btn-normal" onclick="Scriptorium.reset()">消去</button>
@@ -57,7 +58,7 @@
    <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
    <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
    <button class="btn-smallscreen" onclick="Scriptorium.clearSource()">新規</button>
-   <br/>
+   <br>
    <div id="output" style="font-family: monospace; margin-left: 30px; margin-bottom: 10px;">
    </div>
   </div>
@@ -68,7 +69,7 @@
 
   <canvas id="canvas" width=400 height=400 tabindex=0>
   </canvas>
-  <br/>
+  <br>
   <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowLeft')">&larr;</button>
   <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowUp')">&uarr;</button>
   <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowDown')">&darr;</button>
