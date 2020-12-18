@@ -332,12 +332,18 @@ const Scriptorium = new class {
   }
 
   makeDownloadLink() {
+    const filename = document.getElementById(Scriptorium.filename_id).value
+    let mimeType = 'text/plain'
+    if (filename.endsWith('.js'))
+      mimeType = 'text/javascript'
+    else if (filename.endsWith('.html') || filename.endsWith('.htm'))
+      mimeType = 'text/html'
+
     const program = this.editorArea.getDoc().getValue()
-    const blob = new Blob([program], { 'type' : 'text/plain' })
+    const blob = new Blob([program], { 'type' : mimeType })
     window.URL.revokeObjectURL(downloader.href)
     downloader.href = window.URL.createObjectURL(blob)
-    const filename = document.getElementById(Scriptorium.filename_id)
-    downloader.download = filename.value
+    downloader.download = filename
     this.toggleMenu()
   }
 
