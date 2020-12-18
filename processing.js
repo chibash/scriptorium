@@ -40,7 +40,7 @@ Scriptorium.Processing = class {
     if (this.pen == null)
       return
 
-      const old_style = this.pen.fillStyle
+    const old_style = this.pen.fillStyle
     if (typeof(r) === 'number') {
       const g = args[0] || r
       const b = args[1] || r

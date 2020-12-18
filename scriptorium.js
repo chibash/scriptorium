@@ -156,7 +156,11 @@ const Scriptorium = new class {
   toErrorLine(e) {
     // e.line is available only on Safari
     // e.lineNumber is available only on Firefox
-    const line = e.line ? e.line : e.lineNumber
+    let line = e.line ? e.line : e.lineNumber
+    // Safari does not report a correct line number when the error is a syntax error.
+    if (e instanceof SyntaxError)
+      line = false
+
     return new this.ErrorLine(line, e)
   }
 
