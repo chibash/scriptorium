@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="scriptorium.css">
 </head>
 
-<body onresize="Scriptorium.resizeCanvas();">
+<body onresize="Scriptorium.resizeCanvas()">
 
 <header>
 <br>
@@ -26,7 +26,7 @@
     <li><a href="#" download="unknown.js" id="downloader">ファイルへ保存</a></li>
   </ul>
 </nav>
-</nav>
+
 <div id="hmenu" onclick="Scriptorium.toggleMenu()">
   <span class="hmenu_inner_line hmenu_inner_1" id="line1"></span>
   <span class="hmenu_inner_line hmenu_inner_2" id="line2"></span>
@@ -39,7 +39,7 @@
 
 <input type="file" id="filechooser" style="display: none;">
 
-<div style="margin-left: 10px; margin-bottom: 0px;">
+<div onclick="Scriptorium.closeMenu()" style="margin-left: 10px; margin-bottom: 0px;">
   <div id="cells">
   </div>
 

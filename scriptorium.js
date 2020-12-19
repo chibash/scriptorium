@@ -299,12 +299,17 @@ const Scriptorium = new class {
   clearSource() {
     this.editorArea.getDoc().setValue('')
     if (this.isPC)
-      this.editorArea.focus();
+      this.editorArea.focus()
   }
 
   toggleMenu() {
-    document.getElementById('nav').classList.toggle('in');
-    document.getElementById('hmenu').classList.toggle('in');
+    document.getElementById('nav').classList.toggle('in')
+    document.getElementById('hmenu').classList.toggle('in')
+  }
+
+  closeMenu() {
+    document.getElementById('nav').classList.remove('in')
+    document.getElementById('hmenu').classList.remove('in')
   }
 
   changeFontSize() {
