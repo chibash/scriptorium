@@ -15,7 +15,7 @@ const Scriptorium = new class {
   constructor() {
     // HTML elements' ID
     this.filename_id = 'filename'
-    this.zoom_id = 'zoom_inout'
+    this.zoom_id = 'zoom-inout'
     this.chooser_id = 'filechooser'
     this.downloader_id = 'downloader'
     this.cells_id = 'cells'
@@ -23,8 +23,9 @@ const Scriptorium = new class {
     this.output_id = 'output'
     this.canvas_id = 'canvas'
     this.bottom_id = 'bottom'
-    this.run_btn1_id = 'run_btn1'
-    this.run_btn2_id = 'run_btn2'
+    this.run_btn1_id = 'run-btn1'
+    this.run_btn2_id = 'run-btn2'
+    this.run_and_new_id = 'run-and-new'
 
     this.editorArea = null
     this.consoleText = ''
@@ -212,26 +213,30 @@ const Scriptorium = new class {
 
   // callback from turtle.js
   endRunning(src, success, result) {
-    const cells = document.getElementById(this.cells_id);
-    cells.innerHTML += '<pre class="codebox">' + this.escapeHTML(src) + '</pre><p>';
-    cells.innerHTML += this.consoleText;
+    const run_and_new = document.getElementById(this.run_and_new_id).checked
+    const cells = document.getElementById(this.cells_id)
+    if (run_and_new)
+      cells.innerHTML += '<pre class="codebox">' + this.escapeHTML(src) + '</pre>'
+
+    cells.innerHTML += '<p>'
+    cells.innerHTML += this.consoleText
     if (result !== undefined)
       cells.innerHTML += this.escapeHTML(this.getResultingMessage(result))
 
     cells.innerHTML += '</p>'
     cells.onclick = (ev) => { ev.target.focus() }
-    if (success) {
+    if (success && run_and_new) {
       const editor = this.editorArea
       if (editor.getDoc().getValue() == src)
-        CodeMirror.emacs.kill(editor, { line: 0, ch: 0 }, {line: editor.lineCount(), ch: 0 }, true);
+        CodeMirror.emacs.kill(editor, { line: 0, ch: 0 }, {line: editor.lineCount(), ch: 0 }, true)
     }
 
     this.changeStopButton()
-    const out = document.getElementById(this.output_id);
+    const out = document.getElementById(this.output_id)
     out.innerText = ''
     if (this.isPC) {
-      this.editorArea.focus();
-      document.getElementById(this.bottom_id).scrollIntoView(false);
+      this.editorArea.focus()
+      document.getElementById(this.bottom_id).scrollIntoView(false)
     }
   }
 

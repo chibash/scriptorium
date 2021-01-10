@@ -208,6 +208,16 @@ button.btn-normal:hover {
     background-color: #e0e0e0;
 }
 
+input#run-and-new {
+    margin-left: 2em;
+}
+
+label#run-and-new-label {
+    font-size: 15px;
+    font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+    color: #444444;
+}
+
 div#editor {
     width: 690px;
     border: 1px solid gray;
@@ -306,6 +316,26 @@ footer {
         display: none;
     }
  
+    label#run-and-new-label {
+        font-size: 20px;
+    }
+
+    input#run-and-new {
+        display: none;
+    }
+
+    label#run-and-new-label::before {
+        width: 24px;
+        height: 20px;
+        content: '';
+        display: inline-block;
+    }
+
+    input#run-and-new:checked + label#run-and-new-label::before {
+        color: #303F9F;
+        content: '\2713';
+    }
+
     div#editor {
         border: 2px solid gray;
     }
