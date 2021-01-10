@@ -1,6 +1,6 @@
 // Copyright (C) 2019 by Shigeru Chiba.
 
-'use strict';
+'use strict'
 
 function* range(from, to=null) {
   if (to === null) {
@@ -55,7 +55,7 @@ const Scriptorium = new class {
 
     const keymap = { 'Tab': 'autocomplete' }
     if (this.isPC)
-      keymap['Shift-Enter'] = function(cm){ Scriptorium.run(); }
+      keymap['Shift-Enter'] = function(cm){ Scriptorium.run() }
 
     const editor = document.getElementById(this.editor_id)
     this.editorArea = CodeMirror(editor, {
@@ -70,8 +70,8 @@ const Scriptorium = new class {
               esversion: 10 },
     })
 
-    const zoomInOut = document.getElementById(this.zoom_id);
-    zoomInOut.innerHTML = Scriptorium.Msg.zoomOut;
+    const zoomInOut = document.getElementById(this.zoom_id)
+    zoomInOut.innerHTML = Scriptorium.Msg.zoomOut
     const filechooser = document.getElementById(this.chooser_id)
     filechooser.onchange = (evt) => { this.readTextFile(evt.target.files[0]) }
     const downloader = document.getElementById(this.downloader_id)
@@ -121,7 +121,7 @@ const Scriptorium = new class {
 
   run() {
     this.turtleCmd.beeper.enableBeep()    // for Safari
-    const src = this.editorArea.getDoc().getValue();
+    const src = this.editorArea.getDoc().getValue()
     if (src === '')
       return
 
@@ -148,7 +148,7 @@ const Scriptorium = new class {
     catch (e) {
       success = false
       result = this.toErrorLine(e)
-      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(result.line, e));
+      Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(result.line, e))
     }
 
     this.postRun(src, success, result)
@@ -189,11 +189,11 @@ const Scriptorium = new class {
     btn1.onclick = btn2.onclick = (ev) => { Scriptorium.stopRunning() }
 
     const canvas = document.getElementById(this.canvas_id)
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')
     Scriptorium.turtleCmd.runTurtle(canvas, ctx)
     window.onerror = null
     if (this.isPC)
-      this.editorArea.focus();
+      this.editorArea.focus()
   }
 
   // callback from turtle.js
@@ -205,10 +205,10 @@ const Scriptorium = new class {
     else
       value = values
 
-    const value2 = this.escapeHTML(value) + '<br/>';
-    this.consoleText += value2;
-    const out = document.getElementById(this.output_id);
-    out.innerText += value + '\n';
+    const value2 = this.escapeHTML(value) + '<br/>'
+    this.consoleText += value2
+    const out = document.getElementById(this.output_id)
+    out.innerText += value + '\n'
   }
 
   // callback from turtle.js
@@ -252,7 +252,7 @@ const Scriptorium = new class {
     Scriptorium.turtleCmd.stopTurtle(true, undefined)
     this.changeStopButton()
     if (this.isPC)
-      this.editorArea.focus();
+      this.editorArea.focus()
   }
 
   changeStopButton() {
@@ -267,38 +267,38 @@ const Scriptorium = new class {
   }
 
   reset() {
-    const canvas = document.getElementById(this.canvas_id);
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const out = document.getElementById(this.output_id);
+    const canvas = document.getElementById(this.canvas_id)
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const out = document.getElementById(this.output_id)
     out.innerText = ''
-    Scriptorium.turtleCmd.reset();
+    Scriptorium.turtleCmd.reset()
     if (this.isPC)
-      this.editorArea.focus();
+      this.editorArea.focus()
   }
 
   save() {
-    const program = this.editorArea.getDoc().getValue();
+    const program = this.editorArea.getDoc().getValue()
     if (program != null
         && confirm(Scriptorium.Msg.save)) {
-      localStorage.setItem(this.class_name, JSON.stringify(program));
-      this.editorArea.focus();
+      localStorage.setItem(this.class_name, JSON.stringify(program))
+      this.editorArea.focus()
     }
   }
 
   load() {
-    const program = localStorage.getItem(this.class_name);
+    const program = localStorage.getItem(this.class_name)
     if (program != null
         && confirm(Scriptorium.Msg.load)) {
-      this.editorArea.getDoc().setValue(JSON.parse(program));
-      this.editorArea.focus();
+      this.editorArea.getDoc().setValue(JSON.parse(program))
+      this.editorArea.focus()
     }
   }
 
   yank() {
-    this.editorArea.getDoc().setValue(Scriptorium.running_src);
+    this.editorArea.getDoc().setValue(Scriptorium.running_src)
     if (this.isPC)
-      this.editorArea.focus();
+      this.editorArea.focus()
   }
 
   clearSource() {
@@ -358,23 +358,23 @@ const Scriptorium = new class {
   }
 
   escapeHTML(str) {
-    let out = '';
+    let out = ''
     for (const c of str + '') {
       if(c === '<')
-        out += '&lt;';
+        out += '&lt;'
       else if(c === '>')
-        out += '&gt;';
+        out += '&gt;'
       else if(c === "'")
-        out += '&#39;';
+        out += '&#39;'
       else if(c === '"')
-        out += '&quot;';
+        out += '&quot;'
       else if(c === '&')
-        out += '&amp;';
+        out += '&amp;'
       else
-        out += c;
+        out += c
     }
-    return out;
+    return out
   }
 }
 
-window.onload = function () { Scriptorium.onload(); }
+window.onload = function () { Scriptorium.onload() }

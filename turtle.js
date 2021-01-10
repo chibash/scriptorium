@@ -253,7 +253,7 @@ Scriptorium.StartProcessing = class {
       alert(Scriptorium.Msg.alert(line, err))
       cmd.stopTurtle(false, result)
       window.onerror = null
-      return false;   // call the default error handler
+      return false   // call the default error handler
     }
 
     if (Scriptorium.isSafari)
@@ -342,7 +342,7 @@ Scriptorium.Beeper = class {
       const oscillator = ctx.createOscillator()
       oscillator.type = "sine"     // square, sawtooth, triangle
       oscillator.frequency.value = freq
-      oscillator.connect(gainNode).connect(ctx.destination);
+      oscillator.connect(gainNode).connect(ctx.destination)
       oscillator.start()
       this.oscillator = oscillator
       this.beepStopTime = stopTime
