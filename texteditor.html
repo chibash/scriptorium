@@ -18,13 +18,12 @@
 <br>
 <nav id="nav">
   <ul>
-    <li><input id="filename" spellcheck="false" type="text" value="untitled.js"></li>
+    <li><input id="filename" spellcheck="false" type="text" value="untitled.html"></li>
     <li><a href="./help.html">使い方</a></li>
-    <li><a href="./samples.html">プログラム例</a></li>
-    <li><a href="texteditor.html">HTML エディタ</a></li>
     <li><a id="zoom-inout" href="#" onclick="Scriptorium.changeFontSize();">zoom out</a></li>
     <li><a href="#"><label for="filechooser">ファイルの読み込み</label></a></li>
     <li><a href="#" download="unknown.js" id="downloader">ファイルへ保存</a></li>
+    <li><a href="./index.html">戻る</a></li>
   </ul>
 </nav>
 
@@ -46,58 +45,33 @@
 
   <br>
   <div style="margin-left: 50px; margin-bottom: 3px;">
-  <button class="btn-normal" id="run-btn1" onclick="Scriptorium.run()">実行</button>
-  <button class="btn-normal" onclick="Scriptorium.reset()">消去</button>
-  &nbsp;
-  <button class="btn-normal" onclick="Scriptorium.yank()">再編集</button>
   <button class="btn-normal" onclick="Scriptorium.clearSource()">新規</button>
-  <input type="checkbox" id="run-and-new" checked="checked">
-  <label id="run-and-new-label" for="run-and-new">実行後新規編集</label>
   </div>
 
-  <div style="float: left;">
-   <div id="editor"></div>
-   <button class="btn-smallscreen" id="run-btn2" onclick="Scriptorium.run()">実行</button>
-   <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
-   <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
+   <div id="editor" style="width: 97%; height: 80vh;"></div>
    <button class="btn-smallscreen" onclick="Scriptorium.clearSource()">新規</button>
    <br>
    <div id="output">
    </div>
   </div>
 
-  <div style="float: left;">
-  &nbsp;
-  </div>
-
-  <canvas id="canvas" width=400 height=400 tabindex=0>
+  <canvas id="canvas" width=0 height=0 tabindex=0>
   </canvas>
-  <br>
-  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowLeft')">&larr;</button>
-  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowUp')">&uarr;</button>
-  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowDown')">&darr;</button>
-  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowRight')">&rarr;</button>
-
-  <div style="clear: both;"></div>
 </div>
 
 <div id="bottom"></div>
 
-
 <script src="lib/codemirror.js"></script>
+<script src="mode/htmlmixed/htmlmixed.js"></script>
+<script src="mode/css/css.js"></script>
+<script src="mode/xml/xml.js"></script>
 <script src="mode/javascript/javascript.js"></script>
 <script src="addon/edit/matchbrackets.js"></script>
 <script src="addon/hint/show-hint.js"></script>
-<script src="addon/hint/javascript-hint.js"></script>
 <script src="keymap/emacs.js"></script>
-<script src="./jshint.js"></script>
-<script src="addon/lint/lint.js"></script>
-<script src="addon/lint/javascript-lint.js"></script>
-
 
 <script src="./scriptorium.js"></script>
-<script src="./processing.js"></script>
-<script src="./turtle.js"></script>
 <script src="./messages.js"></script>
+<script src="./texteditor.js"></script>
 </body>
 </html>
