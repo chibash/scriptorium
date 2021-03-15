@@ -84,12 +84,13 @@ const Scriptorium = new class {
 
   resizeCanvas() {
     const editor = document.getElementById(this.editor_id)
-    let w = document.body.clientWidth - editor.clientWidth - 50
+    const editorWidthWithMargin = editor.clientWidth + 30
+    let w = document.body.clientWidth - editorWidthWithMargin
     let h = document.body.parentNode.clientHeight - 100
     if (h < w)
       w = h
 
-    if (w < 400)
+    if (w < 360 || (w < 400 && w < screen.availWidth - editorWidthWithMargin))
       w = 690
 
     const c = document.getElementById(this.canvas_id)
