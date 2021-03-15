@@ -9,7 +9,7 @@ function copyCode(name) {
 function execCopy(name) {
   target = document.getElementById(name)
   target.select()
-  document.execCommand("copy");
+  document.execCommand("copy")
 }
 
 for (const elm of document.getElementsByTagName('textarea')) {

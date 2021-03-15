@@ -267,7 +267,7 @@ Scriptorium.ProcessingCmd = class {
     }
 
     if (keyPressed instanceof Function && Scriptorium.isPC)
-      this.canvas.focus();
+      this.canvas.focus()
 
     if (setup instanceof Function) {
       this.setupProc(ctx)
