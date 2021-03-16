@@ -179,6 +179,11 @@ div#output {
     max-height: 600px;
 }
 
+/* for Chrome */
+.codebox::-webkit-scrollbar {
+    display:none;
+}
+
 .codebox:focus {
     outline: 0px solid gray;
 }
