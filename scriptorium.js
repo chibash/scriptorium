@@ -352,6 +352,7 @@ const Scriptorium = new class {
 
     const program = this.editorArea.getDoc().getValue()
     const blob = new Blob([program], { 'type' : mimeType })
+    const downloader = document.getElementById(this.downloader_id)
     window.URL.revokeObjectURL(downloader.href)
     downloader.href = window.URL.createObjectURL(blob)
     downloader.download = filename
