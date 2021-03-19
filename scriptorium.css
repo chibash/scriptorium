@@ -248,13 +248,26 @@ div#bottom {
     height: 10px;
 }
 
-.helpdoc {
+/* for samples.html and help.html */
+
+.body-font {
     font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
-    margin: 20px;
+}
+
+.helpdoc {
+    margin-left: 45px;
+    font-size: 16px;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.2em;
 }
 
 footer {
-    font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
     font-size: 12px;
     padding-top: 50px;
     margin: 20px;

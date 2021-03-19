@@ -1,22 +1,50 @@
-<html>                                                                         
-<head>                                                                         
+<!DOCTYPE html>
+<html>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=0.52">
   <title>Scriptorium</title>
   <link rel="icon" href="./favicon.ico">
+
+  <link rel="stylesheet" href="lib/codemirror.css">
+  <link rel="stylesheet" href="addon/hint/show-hint.css">
+  <link rel="stylesheet" href="addon/lint/lint.css">
   <link rel="stylesheet" href="scriptorium.css">
 </head>
-<body>
-  <header>
-    <br><a id="logo" href="./index.html">Scriptorium</a>
-    <a id="logo-info" href="https://github.com/chibash/scriptorium">github.com/chibash/scriptorium</a>
-  </header>
 
-<div class="helpdoc">
-<h3>プログラム例</h3>
+<body onresize="Scriptorium.resizeCanvas()">
 
-<p>
-<textarea id="code01">
+<header>
+<br>
+<nav id="nav">
+  <ul>
+    <li><input id="filename" spellcheck="false" type="text" value="untitled.js"></li>
+    <li><a href="./help.html">使い方</a></li>
+    <li><a href="texteditor.html">HTML エディタ</a></li>
+    <li><a id="zoom-inout" href="#" onclick="Scriptorium.changeFontSize();">zoom out</a></li>
+    <li><a href="#"><label for="filechooser">ファイルの読み込み</label></a></li>
+    <li><a href="#" download="unknown.js" id="downloader">ファイルへ保存</a></li>
+    <li><a href="./index.html">戻る</a></li>
+  </ul>
+</nav>
+
+<div id="hmenu" onclick="Scriptorium.toggleMenu()">
+  <span class="hmenu_inner_line hmenu_inner_1" id="line1"></span>
+  <span class="hmenu_inner_line hmenu_inner_2" id="line2"></span>
+  <span class="hmenu_inner_line hmenu_inner_3" id="line3"></span>
+</div>
+<span id="logo">Scriptorium</span>
+<a id="logo-info" href="./help.html">使い方</a>
+<a id="logo-info" href="https://scriptorium.chibas.net">scriptorium.chibas.net</a>
+</header>
+
+<input type="file" id="filechooser" style="display: none;">
+
+<div onclick="Scriptorium.closeMenu()" style="margin-left: 10px; margin-bottom: 0px;">
+
+  <div class="helpdoc body-font">
+<h2>プログラム例</h2>
+<p><textarea id="code01">
 function draw() {
   pro.background(white)
   const red = pro.mouseX * 255 / pro.width     // 赤
@@ -28,174 +56,72 @@ function draw() {
   }
 }
 
-pro.start()
-</textarea></p>
+pro.start()</textarea></p>
 
-<p><textarea id="code02">
-// 二つのボールを表す大域変数の宣言    
-let b1 = { x: 200, y: 100, dx: 10, dy: 10 }
-let b2 = { x: 100, y: 300, dx: 5, dy: -10 }
-  
-// move 関数の宣言
-function move(ball) {
-  ball.x = ball.x + ball.dx  // プロパティ x の値を変更
-  ball.y = ball.y + ball.dy
-  if (ball.x < 0) {          // 左右の壁に当たったときの処理
-    ball.x = -ball.x
-    ball.dx = -ball.dx
-  } else if (ball.x > pro.width) {
-    ball.x = pro.width * 2 - ball.x
-    ball.dx = -ball.dx
-  }
-  
-  if (ball.y < 0) {          // 上下の壁に当たったときの処理
-    ball.y = -ball.y
-    ball.dy = -ball.dy
-  } else if (ball.y > pro.height) {
-    ball.y = pro.height * 2 - ball.y
-    ball.dy = -ball.dy
-  }
-}
-  
-// draw 関数の宣言
-function draw() {
-  pro.background(white)
-  move(b1)                   // b1 のプロパティを更新
-  pro.circle(b1.x, b1.y, 5)  // 一つ目のボールを描く
-  move(b2)                   // b2 のプロパティを更新
-  pro.circle(b2.x, b2.y, 5)  // 二つ目のボールを描く
-}
-  
-pro.frameRate(20)    // 毎秒 20 フレームに設定
-pro.start()          // 動画の開始
-</textarea></p>
+  </div>
 
-<p><textarea id="code03">
-let b1 = { x: 200, y: 150, dx: 5, dy: 5 }
-let b2 = { x: 100, y: 300, dx: 5, dy: -10 }
-let paddle = { x: 100, dx: 10, width: 100, height: 5 }
-let blocks = []
+  <div id="cells">
+  </div>
 
-const blockHeight = 10
-const blockWidth = 40
+  <br>
+  <div style="margin-left: 50px; margin-bottom: 3px;">
+  <button class="btn-normal" id="run-btn1" onclick="Scriptorium.run()">実行</button>
+  <button class="btn-normal" onclick="Scriptorium.reset()">消去</button>
+  &nbsp;
+  <button class="btn-normal" onclick="Scriptorium.yank()">再編集</button>
+  <button class="btn-normal" onclick="Scriptorium.clearSource()">新規</button>
+  <input type="checkbox" id="run-and-new">
+  <label id="run-and-new-label" for="run-and-new">実行後新規編集</label>
+  </div>
 
-for (const i of range(6)) {
-  for (const j of range(3)) {
-    blocks[i * 3 + j] = { x: 10 + i * 60, y: 50 + j * 20, visible: true }
-  }
-}
+  <div style="float: left;">
+   <div id="editor"></div>
+   <button class="btn-smallscreen" id="run-btn2" onclick="Scriptorium.run()">実行</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
+   <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
+   <button class="btn-smallscreen" onclick="Scriptorium.clearSource()">新規</button>
+   <br>
+   <div id="output">
+   </div>
+  </div>
 
-function drawBlocks(blks) {
-  for (const b of blks) {
-    if (b.visible) {
-      pro.rect(b.x, b.y, blockWidth, blockHeight)
-    }
-  }
-}
+  <div style="float: left;">
+  &nbsp;
+  </div>
 
-function checkBlocks(blks, ball) {
-  for (const b of blks) {
-    if (b.visible)
-      if (checkCollision(b, blockWidth, 0, ball) ||
-          checkCollision(b, blockWidth, blockHeight, ball)) {
-      b.visible = false
-      ball.dy = -ball.dy
-      pro.beep(880)
-    }
-  }
-}
+  <canvas id="canvas" width=400 height=400 tabindex=0>
+  </canvas>
+  <br>
+  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowLeft')">&larr;</button>
+  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowUp')">&uarr;</button>
+  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowDown')">&darr;</button>
+  <button class="btn-smallscreen key" onclick="Scriptorium.buttonClicked('ArrowRight')">&rarr;</button>
 
-function noBlocks(blks) {
-  for (const b of blks) {
-      if (b.visible)
-        return false
-    }
-
-  return true
-}
-
-function checkCollision(blk, w, yOffset, ball) {
-  return crossingDots(blk.x, blk.y + yOffset, blk.x + w, blk.y + yOffset,
-                      ball.x, ball.y, ball.x - ball.dx, ball.y - ball.dy)
-}
-
-function crossingDots(ax, ay, bx, by, x0, y0, x1, y1) {
-  return crossLine(ax, ay, bx, by, x0, y0, x1, y1) &&
-          crossLine(x0, y0, x1, y1, ax, ay, bx, by)
-}
-
-function crossLine(ax, ay, bx, by, x0, y0, x1, y1) {
-  const s = (x0 - x1) * (ay - y1) - (y0 - y1) * (ax - x1)
-  const t = (x0 - x1) * (by - y1) - (y0 - y1) * (bx - x1)
-  return s * t <= 0
-}
-
-function moveBall(ball, pad) {
-  ball.x = ball.x + ball.dx
-  ball.y = ball.y + ball.dy
-  if (ball.x < 0) {
-    ball.x = -ball.x
-    ball.dx = -ball.dx
-  } else if (ball.x > pro.width) {
-    ball.x = pro.width * 2 - ball.x
-    ball.dx = -ball.dx
-  }
-
-  if (ball.y < 0) {
-    ball.y = -ball.y
-    ball.dy = -ball.dy
-  } else if (ball.y > pro.height - pad.height) {
-    if (pad.x <= ball.x && ball.x <= pad.x + pad.width) {
-      ball.y = (pro.height - pad.height) * 2 - ball.y
-      ball.dy = -ball.dy
-      ball.dx = ball.dx + (ball.x - (pad.x + pad.width / 2)) / 5
-      pro.beep()
-    }
-  }
-}
-
-function movePaddle(pad) {
-  if (pro.mouseX < pad.x) {
-    pad.x = pad.x - pad.dx
-  } else if (pad.x + pad.dx < pro.mouseX) {
-    pad.x = pad.x + pad.dx
-  }
-}
-
-function draw() {
-  pro.background(white)
-  movePaddle(paddle)
-  pro.rect(paddle.x, pro.height - paddle.height,
-            paddle.width, paddle.height)
-  moveBall(b1, paddle)
-  // moveBall(b2, paddle)
-  checkBlocks(blocks, b1)
-  drawBlocks(blocks)
-  pro.circle(b1.x, b1.y, 5)
-  // pro.circle(b2.x, b2.y, 5)
-  if (noBlocks(blocks)) {
-    pro.stop()
-  }
-
-  if (b1.y > pro.height) {
-    b1.dy = -b1.dy
-    // pro.stop()
-  }
-  if (b2.y > pro.height) {
-    b2.dy = -b2.dy
-  }
-}
-
-pro.frameRate(20)
-pro.start()
-</textarea></p>
+  <div style="clear: both;"></div>
 </div>
 
-<footer>
-    Copyright (C) 2019 Shigeru Chiba.
+<div id="bottom"></div>
+
+<footer class="body-font">
+  Copyright (C) 2021 Shigeru Chiba.
 </footer>
+
+<script src="lib/codemirror.js"></script>
+<script src="mode/javascript/javascript.js"></script>
+<script src="addon/edit/matchbrackets.js"></script>
+<script src="addon/hint/show-hint.js"></script>
+<script src="addon/hint/javascript-hint.js"></script>
+<script src="keymap/emacs.js"></script>
+<script src="./jshint.js"></script>
+<script src="addon/lint/lint.js"></script>
+<script src="addon/lint/javascript-lint.js"></script>
+
+
+<script src="./scriptorium.js"></script>
+<script src="./processing.js"></script>
+<script src="./turtle.js"></script>
+<script src="./messages.js"></script>
 
 <script src="./samples.js"></script>
 </body>
 </html>
-

@@ -12,6 +12,14 @@ function execCopy(name) {
   document.execCommand("copy")
 }
 
+function copyToEditor(elm) {
+  const editor = Scriptorium.editorArea
+  editor.getDoc().setValue(elm.value)
+  editor.focus()
+  // editor.scrollIntoView(false)
+  document.getElementById(Scriptorium.bottom_id).scrollIntoView(false)
+}
+
 for (const elm of document.getElementsByTagName('textarea')) {
     elm.readOnly = true
     elm.classList.add('codebox')
@@ -23,13 +31,8 @@ for (const elm of document.getElementsByTagName('textarea')) {
     for (const cls of ['btn-normal', 'btn-smallscreen']) {
       const btn = document.createElement('button')
       btn.classList.add(cls)
-      btn.innerHTML = 'コピー'
-      btn.onclick = () => copyCode(elm.id)
+      btn.innerHTML = '選択'
+      btn.onclick = () => copyToEditor(elm)
       elm.parentNode.appendChild(btn)
-      const btn2 = document.createElement('button')
-      btn2.classList.add(cls)
-      btn2.innerHTML = '戻る'
-      btn2.onclick = () => { document.location.href = 'index.html' }
-      elm.parentNode.appendChild(btn2)
     }
 }
