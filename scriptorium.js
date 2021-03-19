@@ -29,7 +29,8 @@ const Scriptorium = new class {
 
     this.editorArea = null
     this.consoleText = ''
-    this.class_name = 'scriptorium'
+    this.storageKeyName = location.pathname + '/program'
+    this.backupFileName = location.pathname + '/backup'
 
     this.isPC = !('ontouchend' in document)
     this.isSafari = new Error().line
@@ -46,8 +47,6 @@ const Scriptorium = new class {
   }
 
   onload() {
-    const sample = ''
-
     this.audioContext = function(win) {
       const AudioContext = win.AudioContext || win.webkitAudioContext
       return AudioContext ? new AudioContext() : null
@@ -60,7 +59,7 @@ const Scriptorium = new class {
     const editor = document.getElementById(this.editor_id)
     this.editorArea = CodeMirror(editor, {
       mode: 'javascript',
-      value: sample,
+      value: this.restoreAutoSaved(),
       lineNumbers: true,
       keyMap: 'emacs',
       matchBrackets: true,
@@ -69,6 +68,7 @@ const Scriptorium = new class {
       lint: { asi: true,
               esversion: 10 },
     })
+    this.setAutoSaver(this.editorArea, 3000 /* msec. */)
 
     const zoomInOut = document.getElementById(this.zoom_id)
     zoomInOut.innerHTML = Scriptorium.Msg.zoomOut
@@ -99,6 +99,36 @@ const Scriptorium = new class {
     c.width = w
     c.height = w
     ctx.putImageData(img, 0, 0)
+  }
+
+  restoreAutoSaved() {
+    const text = localStorage.getItem(this.backupFileName)
+    if (text === null)
+      return ''
+    else
+      return String(text)
+  }
+
+  setAutoSaver(codemirror, timeout) {
+    const autosaver = () => {
+      const text = codemirror.getDoc().getValue()
+      if (text === '')
+        localStorage.removeItem(this.backupFileName)
+      else
+        localStorage.setItem(this.backupFileName, text)
+    }
+
+    const debounce = (f, timeout) => {
+      let timer
+      return () => {
+        if (timer)
+          clearTimeout(timer)
+
+        timer = setTimeout(() => f(), timeout)
+      }
+    }
+
+    codemirror.on('change', debounce(autosaver, timeout))
   }
 
   /*
@@ -282,13 +312,13 @@ const Scriptorium = new class {
     const program = this.editorArea.getDoc().getValue()
     if (program != null
         && confirm(Scriptorium.Msg.save)) {
-      localStorage.setItem(this.class_name, JSON.stringify(program))
+      localStorage.setItem(this.storageKeyName, JSON.stringify(program))
       this.editorArea.focus()
     }
   }
 
   load() {
-    const program = localStorage.getItem(this.class_name)
+    const program = localStorage.getItem(this.storageKeyName)
     if (program != null
         && confirm(Scriptorium.Msg.load)) {
       this.editorArea.getDoc().setValue(JSON.parse(program))
