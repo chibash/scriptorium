@@ -1,4 +1,4 @@
-// Copyright (C) 2019 by Shigeru Chiba.
+// Copyright (C) 2019-2021 by Shigeru Chiba.
 
 // the following code depends on scriptorium.js and processing.js
 

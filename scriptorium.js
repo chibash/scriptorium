@@ -1,4 +1,4 @@
-// Copyright (C) 2019 by Shigeru Chiba.
+// Copyright (C) 2019-2021 by Shigeru Chiba.
 
 'use strict'
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2020 by Shigeru Chiba.
+// Copyright (C) 2019-2021 by Shigeru Chiba.
 
 Scriptorium.resizeCanvas = function () {}
 
