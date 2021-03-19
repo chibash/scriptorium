@@ -43,22 +43,373 @@
 <div onclick="Scriptorium.closeMenu()" style="margin-left: 10px; margin-bottom: 0px;">
 
   <div class="helpdoc body-font">
-<h2>プログラム例</h2>
+<h1>プログラム例</h1>
+
+<h3>1 章 1.3 節</h3>
+<p>三角形を描きます。</p>
 <p><textarea id="code01">
+turtle.forward(200)
+turtle.right(120)
+turtle.forward(200)
+turtle.right(120)
+turtle.forward(200)</textarea></p>
+
+<h3>3 章 3.2 節</h3>
+<p>彗星を描きます。</p>
+<p><textarea id="code03">
+// 彗星
+turtle.speed(5)              // 亀の速度を５倍速に
+turtle.move(200, 200)        // 上側の直線を引く
+turtle.up()                  // ペンを上げる
+turtle.move(200, 220)        // 亀の位置を下にずらす（線は描かれない）
+turtle.down()                // ペンを下げる
+for (const i of range(5)) {  // ここから星を描く
+  turtle.forward(50)
+  turtle.left(72)
+  turtle.forward(50)
+  turtle.right(144)
+}
+turtle.move(80, 150)         // 下側の直線を引く</textarea></p>
+
+<h3>11 章 1.1 節</h3>
+<p>簡単なスロットマシン。クリックすると窓の中の記号の変化が止まります。</p>
+<p><textarea id="code11a">
+let stage = 0    // 現在の段階（止まった窓の数）
+
+function drawSymbol(x) {       // 記号を描く
+  const dice = Math.random()   // 疑似乱数を一つ得る
+  pro.rect(x - 5, 70, 40, 40)  // 四角を描く
+  if (dice < 0.3) {            // 0.3 未満なら
+    pro.text('☆', x, 100)
+  } else if (dice < 0.6) {     // そうでなくて、かつ 0.6 未満なら
+    pro.text('○', x, 100)
+  } else {                     // それ以外
+    pro.text('♡', x, 100)
+  }
+}
+
 function draw() {
-  pro.background(white)
-  const red = pro.mouseX * 255 / pro.width     // 赤
-  const green = pro.mouseY * 255 / pro.height  // 緑
+  if (stage < 1) {
+    drawSymbol(50)    // 左端の窓を描き直す
+  }
+  if (stage < 2) {
+    drawSymbol(100)   // 中央の窓を描き直す
+  }
+  if (stage < 3) {
+    drawSymbol(150)   // 右端の窓を描き直す
+  }
+}
+
+function mouseClicked() {  // クリックされたら
+  stage = (stage + 1) % 4
+}
+
+pro.start()    // ゲームの開始</textarea></p>
+
+<h3>11 章 11.3 節</h3>
+<p>マウスポインタの位置によって 6 つの円の色が変わります。</p>
+<p><textarea id="code11b">
+function draw() {
+  pro.background(white)                        // 背景を白く塗りつぶす
+  const red = pro.mouseX * 255 / pro.width     // 赤の明るさ
+  const green = pro.mouseY * 255 / pro.height  // 緑の明るさ
   for (const i of range(6)) {
     pro.noStroke()                             // 線なし
-    pro.fill(pro.color(red, green, i * 40))    // 色を指定
+    const c = pro.color(red, green, i * 40)
+    pro.fill(c)                                // 塗りつぶし色を指定
     pro.circle(i * 60 + 30, 100, 15)           // 円を描く
   }
 }
 
 pro.start()</textarea></p>
 
-  </div>
+<h3>13 章 13.3 節</h3>
+<p>パドルでボールを打ち返す簡単なゲーム。</p>
+<p><textarea id="code13">
+// 二つのボール（速度を遅くする）
+const ball1 = { x: 200, y: 100, dx: 5, dy: 5 }
+const ball2 = { x: 100, y: 300, dx: 3, dy: -5 }
+
+// ボール用の move メソッド
+ball1.move = ball2.move = function (pad) {
+  this.x = this.x + this.dx
+  this.y = this.y + this.dy
+
+  // 左右の壁に当たったときの処理
+  if (this.x < 0) {
+    this.x = -this.x
+    this.dx = -this.dx
+  } else if (this.x > pro.width) {
+    this.x = pro.width * 2 - this.x
+    this.dx = -this.dx
+  }
+
+  if (this.y < 0) {
+    // 上の壁に当たったとき
+    this.y = -this.y
+    this.dy = -this.dy
+  } else if (this.y > pro.height - pad.height) {
+    // 下の壁近くに到達したとき
+    if (pad.x <= this.x && this.x <= pad.x + pad.width) {
+      // パドルに当たっていれば跳ね返る
+      this.y = (pro.height - pad.height) * 2 - this.y
+      this.dy = -this.dy
+      this.dx = this.dx + (this.x - (pad.x + pad.width/2))/5
+      pro.beep()    // 音を鳴らす
+    }
+  }
+}
+
+// ボール用の show メソッド
+ball1.show = ball2.show = function () {
+  pro.circle(this.x, this.y, 5)
+}
+
+// ボール用の isOut メソッド（ボールが画面外か判定）
+ball1.isOut = ball2.isOut = function () {
+  return this.y > pro.height
+}
+
+// パドル
+const paddle = { x: 100, dx: 10, width: 100, height: 5 }
+
+// パドル用の move メソッド
+paddle.move = function () {
+  if (pro.mouseX < this.x) {
+    this.x = this.x - this.dx    // パドルを左へ
+  } else if (this.x + this.width < pro.mouseX) {
+    this.x = this.x + this.dx    // パドルを右へ
+  }
+}
+
+// パドル用の show メソッド
+paddle.show = function () {
+  pro.rect(this.x, pro.height - this.height,
+           this.width, this.height)
+}
+
+// draw 関数の宣言
+function draw() {
+  pro.background(white)  // 背景を白く塗りつぶす
+  paddle.move()          // パドルを動かす
+  paddle.show()          // パドルを描く
+  ball1.move(paddle)     // 一つ目のボールを動かす
+  ball1.show()           // 一つ目のボールを描く
+  ball2.move(paddle)     // 二つ目のボールを動かす
+  ball2.show()           // 二つ目のボールを描く
+
+  // ボールが下の壁を越えたら終了
+  if (ball1.isOut() || ball2.isOut()) {
+    pro.stop()           // プログラム終了
+  }
+}
+
+pro.frameRate(20)    // 毎秒 20 フレームに設定
+pro.start()          // 動画の開始</textarea></p>
+
+<h3>15 章 15.2 節</h3>
+<p>ブロック崩し風のゲーム。</p>
+<p><textarea id="code15">
+// 二つのボール（速度を遅くする）
+const ball1 = { x: 200, y: 100, dx: 5, dy: 5 }
+const ball2 = { x: 100, y: 300, dx: 3, dy: -5 }
+
+// ボール用の move メソッド
+ball1.move = ball2.move = function (pad) {
+  this.x = this.x + this.dx
+  this.y = this.y + this.dy
+
+  // 左右の壁に当たったときの処理
+  if (this.x < 0) {
+    this.x = -this.x
+    this.dx = -this.dx
+  } else if (this.x > pro.width) {
+    this.x = pro.width * 2 - this.x
+    this.dx = -this.dx
+  }
+
+  if (this.y < 0) {
+    // 上の壁に当たったとき
+    this.y = -this.y
+    this.dy = -this.dy
+  } else if (this.y > pro.height - pad.height) {
+    // 下の壁近くに到達したとき
+    if (pad.x <= this.x && this.x <= pad.x + pad.width) {
+      // パドルに当たっていれば跳ね返る
+      this.y = (pro.height - pad.height) * 2 - this.y
+      this.dy = -this.dy
+      this.dx = this.dx + (this.x - (pad.x + pad.width/2))/5
+      pro.beep()    // 音を鳴らす
+    }
+  }
+}
+
+// ボール用の show メソッド
+ball1.show = ball2.show = function () {
+  pro.circle(this.x, this.y, 5)
+}
+
+// ボール用の isOut メソッド（ボールが画面外か判定）
+ball1.isOut = ball2.isOut = function () {
+  return this.y > pro.height
+}
+
+// パドル
+const paddle = { x: 100, dx: 10, width: 100, height: 5 }
+
+// パドル用の move メソッド
+paddle.move = function () {
+  if (pro.mouseX < this.x) {
+    this.x = this.x - this.dx    // パドルを左へ
+  } else if (this.x + this.width < pro.mouseX) {
+    this.x = this.x + this.dx    // パドルを右へ
+  }
+}
+
+// パドル用の show メソッド
+paddle.show = function () {
+  pro.rect(this.x, pro.height - this.height,
+           this.width, this.height)
+}
+
+// ブリックとボールの当たり判定をする hits メソッド
+ball1.hits = ball2.hits = function (brk) {
+  return this.hitsSide(brk, 0) ||
+         this.hitsSide(brk, BRICK_HEIGHT)
+}
+
+// ブリックの辺 (side) とボールの当たり判定をする hitsSide メソッド
+ball1.hitsSide = ball2.hitsSide = function (brk, yOffset) {
+  return pro.crossing(this.x, this.y,
+                      this.x - this.dx, this.y - this.dy,
+                      brk.x, brk.y + yOffset,
+                      brk.x + BRICK_WIDTH, brk.y + yOffset)
+}
+
+// ブリック
+const BRICK_WIDTH = 40     // ブリックの幅
+const BRICK_HEIGHT = 10    // ブリックの高さ
+const allBricks = []       // 空の配列
+
+const brickShow = function () {
+  if (this.visible) {
+    pro.rect(this.x, this.y, BRICK_WIDTH, BRICK_HEIGHT)
+  }
+}
+
+const brickCheckHit = function (b1, b2) {
+  if (this.visible) {
+    if (b1.hits(this) || b2.hits(this)) {
+      pro.beep(880)
+      this.visible = false
+    }
+  }
+}
+
+for (const i of range(6)) {
+  for (const j of range(3)) {
+    const brick = { x: 10 + i * 60, y: 50 + j * 20,
+                    visible: true }  // オブジェクトを一つ作る
+    brick.show = brickShow           // brick に show メソッドを加える
+    brick.checkHit = brickCheckHit   // brick に checkHit メソッドを加える
+    allBricks.push(brick)            // brick を配列に加える
+  }
+}
+
+function numOfBricks(bricks) {
+  let sum = 0              // 変数 sum の値は最初 0
+  for (const i of range(bricks.length)) {
+    const b = bricks[i]
+    if (b.visible) {       // まだ消えていなければ
+      sum = sum + 1        // sum を 1 増やす
+    }
+  }
+  return sum               // 最終的な sum の値が戻り値
+}
+
+// draw 関数の宣言
+function draw() {
+  pro.background(white)    // 背景を白く塗りつぶす
+  paddle.move()            // パドルを動かす
+  paddle.show()            // パドルを描く
+  ball1.move(paddle)       // ball1 を動かす
+  ball2.move(paddle)       // ball2 を動かす
+
+  // どちらかのボールがブリックに当たったらブリックを消す
+  for (const i of range(allBricks.length)) {
+    const brick = allBricks[i]    // i 番目のブリック
+    brick.checkHit(ball1, ball2)  // ボールが当たったら消す
+    brick.show()                  // ブリックを描く
+  }
+
+  ball1.show()             // ball1 を描く
+  ball2.show()             // ball2 を描く
+
+  // ボールが下の壁を越えたら終了
+  if (ball1.isOut() || ball2.isOut() ||
+      numOfBricks(allBricks) == 0) {
+    pro.stop()             // プログラムの実行終了
+  }
+}
+
+pro.frameRate(20)    // 毎秒 20 フレームに設定
+pro.start()          // 動画の開始</textarea></p>
+
+<h3>16 章 1 節</h3>
+<p>HTML ファイル。</p>
+<p><textarea id="code16a">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>プログラミングの練習</title>
+    <style>
+      h1 {
+        font-size: x-large;
+        font-family: sans-serif;
+      }
+      canvas {
+        border: 1px solid gray;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JavaScript プログラム</h1>
+    <canvas id="draw-area" width=600 height=600></canvas>
+    <script src="program.js"></script>
+  </body>
+</html></textarea></p>
+
+<h3>16 章 3 節</h3>
+<p>JavaScript ファイル（クリックすると絵が止まる）</p>
+<p><textarea id="code16b">
+const drawArea = document.getElementById('draw-area')
+let running = true    // 動かし続けるか否か
+let frameCount = 0    // 今何回目の draw の呼び出しか
+
+function draw() {
+  const pen = drawArea.getContext('2d')
+  // 背景を白く塗りつぶす
+  pen.clearRect(0, 0, drawArea.width, drawArea.height)
+  // 長方形を描く
+  pen.strokeRect(100, frameCount % drawArea.height, 30, 10)
+}
+
+function callback() {
+  draw()
+  frameCount = frameCount + 1    // frameCount を 1 増やす
+  if (running) {                 // もし running が true なら
+    window.requestAnimationFrame(callback)
+  }
+}
+
+drawArea.onclick = function () {
+  running = false                // プログラムを止める
+}
+
+window.requestAnimationFrame(callback)</textarea></p>
+
+</div>
 
   <div id="cells">
   </div>

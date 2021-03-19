@@ -1,13 +1,13 @@
 // Copyright (C) 2019-2021 by Shigeru Chiba.
 
 function copyCode(name) {
-  // const code = document.getElementById(name).innerText
+  target = document.getElementById(name)
+  // const code = target.innerText
   // navigator.clipboard.writeText(code)
-  this.execCopy(name)
+  this.execCopy(target)
 }
 
-function execCopy(name) {
-  target = document.getElementById(name)
+function execCopy(target) {
   target.select()
   document.execCommand("copy")
 }
@@ -16,23 +16,27 @@ function copyToEditor(elm) {
   const editor = Scriptorium.editorArea
   editor.getDoc().setValue(elm.value)
   editor.focus()
-  // editor.scrollIntoView(false)
   document.getElementById(Scriptorium.bottom_id).scrollIntoView(false)
 }
 
 for (const elm of document.getElementsByTagName('textarea')) {
     elm.readOnly = true
-    elm.classList.add('codebox')
+    elm.classList.add('codebox', 'codebox-size')
     elm.wrap = 'off'
     const len = elm.value.match(/\n/g).length
-    elm.rows = len < 30 ? len + 2 : 30
+    elm.rows = len < 15 ? len + 1 : 15
 
     elm.parentNode.appendChild(document.createElement('br'))
     for (const cls of ['btn-normal', 'btn-smallscreen']) {
       const btn = document.createElement('button')
       btn.classList.add(cls)
-      btn.innerHTML = '選択'
-      btn.onclick = () => copyToEditor(elm)
+      if (elm.id.startsWith('code16')) {
+        btn.innerHTML = 'コピー'
+        btn.onclick = () => execCopy(elm)
+      } else {
+        btn.innerHTML = '選択'
+        btn.onclick = () => copyToEditor(elm)
+      }
       elm.parentNode.appendChild(btn)
     }
 }
