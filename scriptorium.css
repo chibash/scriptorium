@@ -256,6 +256,7 @@ div#bottom {
 
 .helpdoc {
     margin-left: 45px;
+    margin-right: 100px;
     font-size: 16px;
 }
 
@@ -273,8 +274,11 @@ h2 {
 }
 
 h3 {
-    left-mergin: 30px;
     font-size: 1.1em;
+}
+
+code {
+    font-size: 1.2em;
 }
 
 footer {
