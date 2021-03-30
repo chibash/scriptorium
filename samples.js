@@ -40,3 +40,9 @@ for (const elm of document.getElementsByTagName('textarea')) {
       elm.parentNode.appendChild(btn)
     }
 }
+
+window.onload = function () {
+  Scriptorium.onload()
+  Scriptorium.editorArea.getInputField().blur()
+  window.scrollTo(0, 0)
+}

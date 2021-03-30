@@ -302,6 +302,10 @@ footer {
 }
 
 @media screen and (max-width: 900px) {
+    .helpdoc {
+        font-size: 24px;
+    }
+
     header {
         height: 100px;
     }
@@ -401,5 +405,8 @@ footer {
     canvas#canvas {
         border: 2px solid gray;
     }
-}
 
+    footer {
+        font-size: 18px;
+    }
+}
