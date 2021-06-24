@@ -16,16 +16,13 @@
 
 <header>
 <br>
-<nav id="nav">
+<nav id="nav" style="z-index: 100;">
   <ul>
-    <li><input id="filename" spellcheck="false" type="text" value="untitled.js"></li>
+    <li><input id="filename" spellcheck="false" type="text" value="untitled.xml"></li>
     <li><a href="./help.html">使い方</a></li>
-    <li><a href="./samples.html">プログラム例</a></li>
-    <li><a href="blockly.html">Scratch 風エディタ</a></li>
-    <li><a href="texteditor.html">HTML エディタ</a></li>
-    <li><a id="zoom-inout" href="#" onclick="Scriptorium.changeFontSize();">zoom out</a></li>
     <li><a href="#"><label for="filechooser">ファイルの読み込み</label></a></li>
-    <li><a href="#" download="unknown.js" id="downloader">ファイルへ保存</a></li>
+    <li><a href="#" download="unknown.xml" id="downloader">ファイルへ保存</a></li>
+    <li><a href="./index.html">戻る</a></li>
   </ul>
 </nav>
 
@@ -50,17 +47,15 @@
   <button class="btn-normal" id="run-btn1" onclick="Scriptorium.run()">実行</button>
   <button class="btn-normal" onclick="Scriptorium.reset()">消去</button>
   &nbsp;
-  <button class="btn-normal" onclick="Scriptorium.yank()">再編集</button>
   <button class="btn-normal" onclick="Scriptorium.clearSource()">新規</button>
-  <input type="checkbox" id="run-and-new" checked="checked">
-  <label id="run-and-new-label" for="run-and-new">実行後新規編集</label>
+  <div id="run-and-new"></div>
   </div>
 
   <div style="float: left;">
-   <div id="editor"></div>
+   <div id="editor" style="height: 600px;"></div>
    <button class="btn-smallscreen" id="run-btn2" onclick="Scriptorium.run()">実行</button>
    <button class="btn-smallscreen" onclick="Scriptorium.reset()">消去</a>
-   <button class="btn-smallscreen" onclick="Scriptorium.yank()">再編集</button>
+   &nbsp;
    <button class="btn-smallscreen" onclick="Scriptorium.clearSource()">新規</button>
    <br>
    <div id="output">
@@ -84,21 +79,36 @@
 
 <div id="bottom"></div>
 
+<xml id="toolbox" style="display: none">
+  <category name="文" colour="120">
+    <block type="turtle"></block>
+    <block type="const"></block>
+    <block type="let"></block>
+    <block type="log"></block>
+    <block type="statement"></block>
+  </category>
+  <category name="制御" colour="230">
+    <block type="for_of"></block>
+    <block type="if"></block>
+    <block type="ifthen"></block>
+    <block type="ifelse2"></block>
+  </category>
+  <category name="関数" colour="290">
+    <block type="func"></block>
+  </category>
+</xml>
 
-<script src="lib/codemirror.js"></script>
-<script src="mode/javascript/javascript.js"></script>
-<script src="addon/edit/matchbrackets.js"></script>
-<script src="addon/hint/show-hint.js"></script>
-<script src="addon/hint/javascript-hint.js"></script>
-<script src="keymap/emacs.js"></script>
-<script src="./jshint.js"></script>
-<script src="addon/lint/lint.js"></script>
-<script src="addon/lint/javascript-lint.js"></script>
-
+<script src="./blockly/blockly_compressed.js"></script>
+<script src="./blockly/blocks_compressed.js"></script>
+<script src="./blockly/javascript_compressed.js"></script>
+<script src="./blockly/ja.js"></script>
+<script src="./blockly/jsblocks.js"></script>
 
 <script src="./scriptorium.js"></script>
 <script src="./processing.js"></script>
 <script src="./turtle.js"></script>
 <script src="./messages.js"></script>
+
+<script src="./blockly/scriptorium.js"></script>
 </body>
 </html>

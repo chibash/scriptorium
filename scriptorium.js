@@ -47,11 +47,7 @@ const Scriptorium = new class {
   }
 
   onload() {
-    this.audioContext = function(win) {
-      const AudioContext = win.AudioContext || win.webkitAudioContext
-      return AudioContext ? new AudioContext() : null
-    }(window)
-
+    this.initializeAudio()
     const keymap = { 'Tab': 'autocomplete' }
     if (this.isPC)
       keymap['Shift-Enter'] = function(cm){ Scriptorium.run() }
@@ -68,7 +64,8 @@ const Scriptorium = new class {
       lint: { asi: true,
               esversion: 10 },
     })
-    this.setAutoSaver(this.editorArea, 3000 /* msec. */)
+
+    this.editorArea.on('change', this.makeAutoSaver())
 
     const zoomInOut = document.getElementById(this.zoom_id)
     zoomInOut.innerHTML = Scriptorium.Msg.zoomOut
@@ -80,6 +77,13 @@ const Scriptorium = new class {
     this.resizeCanvas()
     this.editorArea.setSize('100%', '400px')
     this.editorArea.focus()
+  }
+
+  initializeAudio() {
+    this.audioContext = function(win) {
+      const AudioContext = win.AudioContext || win.webkitAudioContext
+      return AudioContext ? new AudioContext() : null
+    }(window)
   }
 
   resizeCanvas() {
@@ -101,6 +105,32 @@ const Scriptorium = new class {
     ctx.putImageData(img, 0, 0)
   }
 
+  // get the editor's content in a format writable into a file.
+  // this may return '' but does not return null.
+  getSourceFromEditor() {
+    return this.getProgramFromEditor()
+  }
+
+  // get a JavaScript program from the editor.
+  // this returns a non-null string object.
+  getProgramFromEditor() {
+    return this.editorArea.getDoc().getValue()
+  }
+
+  // source may be null or ''.
+  writeSourceToEditor(source) {
+    if (source === null)
+      source = ''
+
+    this.writeProgramToEditor(source)
+  }
+
+  // program must be a non-null string object.
+  writeProgramToEditor(program) {
+    this.editorArea.getDoc().setValue(program)
+  }
+
+  // this may return '' when no backup is found.
   restoreAutoSaved() {
     const text = localStorage.getItem(this.backupFileName)
     if (text === null)
@@ -109,10 +139,11 @@ const Scriptorium = new class {
       return String(text)
   }
 
-  setAutoSaver(codemirror, timeout) {
+  makeAutoSaver() {
+    const timeout = 3000 /* msec. */
     const autosaver = () => {
-      const text = codemirror.getDoc().getValue()
-      if (text === '')
+      const text = this.getSourceFromEditor()
+      if (text === '' || text === null)
         localStorage.removeItem(this.backupFileName)
       else
         localStorage.setItem(this.backupFileName, text)
@@ -128,7 +159,7 @@ const Scriptorium = new class {
       }
     }
 
-    codemirror.on('change', debounce(autosaver, timeout))
+    return debounce(autosaver, timeout)
   }
 
   /*
@@ -152,7 +183,7 @@ const Scriptorium = new class {
 
   run() {
     this.turtleCmd.beeper.enableBeep()    // for Safari
-    const src = this.editorArea.getDoc().getValue()
+    const src = this.getProgramFromEditor()
     if (src === '')
       return
 
@@ -257,9 +288,10 @@ const Scriptorium = new class {
     cells.innerHTML += '</p>'
     cells.onclick = (ev) => { ev.target.focus() }
     if (success && run_and_new) {
-      const editor = this.editorArea
-      if (editor.getDoc().getValue() == src)
+      if (this.getProgramFromEditor() == src) {
+        const editor = this.editorArea
         CodeMirror.emacs.kill(editor, { line: 0, ch: 0 }, {line: editor.lineCount(), ch: 0 }, true)
+      }
     }
 
     this.changeStopButton()
@@ -309,8 +341,8 @@ const Scriptorium = new class {
   }
 
   save() {
-    const program = this.editorArea.getDoc().getValue()
-    if (program != null
+    const program = this.getSourceFromEditor()
+    if (program !== null
         && confirm(Scriptorium.Msg.save)) {
       localStorage.setItem(this.storageKeyName, JSON.stringify(program))
       this.editorArea.focus()
@@ -321,19 +353,19 @@ const Scriptorium = new class {
     const program = localStorage.getItem(this.storageKeyName)
     if (program != null
         && confirm(Scriptorium.Msg.load)) {
-      this.editorArea.getDoc().setValue(JSON.parse(program))
+      this.writeSourceToEditor(JSON.parse(program))
       this.editorArea.focus()
     }
   }
 
   yank() {
-    this.editorArea.getDoc().setValue(Scriptorium.running_src)
+    this.writeProgramToEditor(Scriptorium.running_src)
     if (this.isPC)
       this.editorArea.focus()
   }
 
   clearSource() {
-    this.editorArea.getDoc().setValue('')
+    this.writeSourceToEditor(null)
     if (this.isPC)
       this.editorArea.focus()
   }
@@ -365,7 +397,7 @@ const Scriptorium = new class {
   readTextFile(f) {
     const reader = new FileReader()
     reader.onload = (event) => {
-      this.editorArea.getDoc().setValue(event.target.result)
+      this.writeSourceToEditor(event.target.result)
       this.editorArea.focus()
     }
     reader.readAsText(f)
@@ -379,8 +411,10 @@ const Scriptorium = new class {
       mimeType = 'text/javascript'
     else if (filename.endsWith('.html') || filename.endsWith('.htm'))
       mimeType = 'text/html'
+    else if (filename.endsWith('.xml'))
+      mimeType = 'application/xml'
 
-    const program = this.editorArea.getDoc().getValue()
+    const program = this.getSourceFromEditor()
     const blob = new Blob([program], { 'type' : mimeType })
     const downloader = document.getElementById(this.downloader_id)
     window.URL.revokeObjectURL(downloader.href)
