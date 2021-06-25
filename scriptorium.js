@@ -34,6 +34,7 @@ const Scriptorium = new class {
 
     this.isPC = !('ontouchend' in document)
     this.isSafari = new Error().line
+    this.isFirefox = new Error().lineNumber
     this.running_src = ''
 
     this.audioContext = null
@@ -230,6 +231,9 @@ const Scriptorium = new class {
   runSrc(src) {
     window.onerror = (msg, src, line, col, err) => {
       const result = err === null ? msg : err
+      if (typeof err === 'string')
+        line = '?'    // thrown by Scriptorium.TurtleCmd.assertNumber()
+
       Scriptorium.turtleCmd.pushAlert(Scriptorium.Msg.alert(line, result))
       Scriptorium.postRun(Scriptorium.running_src, false, new this.ErrorLine(line, result))
       return false   // call the default error handler
@@ -237,7 +241,11 @@ const Scriptorium = new class {
 
     Scriptorium.running_src = src
     const s = document.createElement('script')
-    s.innerHTML = '{ ' + src + '\n ;\n}\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
+    if (this.isFirefox)
+      s.innerHTML = 'try{ ' + src + '\n ;\n}catch(e){throw e}\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
+    else
+      s.innerHTML = '{ ' + src + '\n ;\n}\nScriptorium.postRun(Scriptorium.running_src, true, undefined);\n'
+
     document.body.appendChild(s)
   }
 
