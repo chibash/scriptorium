@@ -18,3 +18,4 @@ Scriptorium.Msg.zoomOut = '文字縮小'
 // for turtle.js
 
 Scriptorium.Msg.assertNum = name => `${name} への引数が数値ではありません。`
+Scriptorium.Msg.assertVal = name => `${name} への引数がありません。`

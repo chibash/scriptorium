@@ -57,8 +57,8 @@ Scriptorium.Turtle = class {
   }
 
   move(x, y) {
-    this.turtleCmd.assertNumber('move(x)', x)
-    this.turtleCmd.assertNumber('move(y)', y)
+    this.turtleCmd.assertNumber('move(x,_)', x)
+    this.turtleCmd.assertNumber('move(_,y)', y)
     this.turtleCmd.push(new Scriptorium.Move(this, x, y))
   }
 
@@ -380,6 +380,9 @@ Scriptorium.TurtleCmd = class {
   }
 
   assertNumber(msg, x) {
+    if (x === undefined)
+      throw Scriptorium.Msg.assertVal(msg)
+
     if (typeof x != 'number')
       throw Scriptorium.Msg.assertNum(msg)
   }
