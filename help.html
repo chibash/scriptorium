@@ -8,11 +8,24 @@
 </head>
 <body>
   <header>
-    <br><a id="logo" href="./index.html">Scriptorium</a>
+    <br>
+    <nav id="nav">
+      <ul>
+        <li><a href="./index.html">戻る</a></li>
+      </ul>
+    </nav>
+    
+    <div id="hmenu" onclick="toggleMenu()">
+      <span class="hmenu_inner_line hmenu_inner_1" id="line1"></span>
+      <span class="hmenu_inner_line hmenu_inner_2" id="line2"></span>
+      <span class="hmenu_inner_line hmenu_inner_3" id="line3"></span>
+    </div>
+    <span id="logo">Scriptorium</span>
+    <a id="logo-info" href="./help.html">使い方</a>
     <a id="logo-info" href="https://scriptorium.chibas.net">scriptorium.chibas.net</a>
   </header>
 
-<div class="helpdoc body-font">
+  <div class="helpdoc body-font" onclick="closeMenu()">
   <h1>使い方</h1>
 
   <img src="./window.png" width=90%>
@@ -72,6 +85,7 @@
   <p>また必要なファイルを事前にすべてダウンロードしておけば、インターネット接続がなくても本プログラミング環境を利用することができます。
 必要なファイルは <a href="https://github.com/chibash/scriptorium">https://github.com/chibash/scriptorium</a> からダウンロードできます。</P>
 
+  <p>本プログラミング環境は内部で <a href="https://codemirror.net/">CodeMirror</a>、<a href="https://jshint.com">JSHint</a>、そして <a href="https://developers.google.com/blockly">Blockly</a> を利用しています。</p>
 </div>
 
 <footer class="body-font">
@@ -82,6 +96,17 @@
   <button class="btn-smallscreen" onclick="document.location.href='./index.html'">戻る</button>
 </footer>
 
+<script>
+function toggleMenu() {
+  document.getElementById('nav').classList.toggle('in')
+  document.getElementById('hmenu').classList.toggle('in')
+}
+
+function closeMenu() {
+    document.getElementById('nav').classList.remove('in')
+    document.getElementById('hmenu').classList.remove('in')
+}
+</script>
 </body>
 </html>
 
