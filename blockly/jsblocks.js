@@ -1,5 +1,9 @@
 // Copyright (C) 2019-2021 by Shigeru Chiba.
 
+(function () {
+
+const helppage = './help.html'
+
 Blockly.Blocks['for_of'] = {
   init: function() {
     this.appendDummyInput()
@@ -17,7 +21,7 @@ Blockly.Blocks['for_of'] = {
     this.setNextStatement(true, null);
     this.setColour(230);
     this.setTooltip("繰り返し");
-    this.setHelpUrl("http://scriptorium.chibas.net");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -48,7 +52,7 @@ Blockly.Blocks['if'] = {
     this.setNextStatement(true, null);
     this.setColour(230);
     this.setTooltip("条件分け");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -75,7 +79,7 @@ Blockly.Blocks['ifthen'] = {
     this.setNextStatement(true, null);
     this.setColour(230);
     this.setTooltip("条件つき実行");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -111,7 +115,7 @@ Blockly.Blocks['ifelse2'] = {
     this.setNextStatement(true, null);
     this.setColour(230);
     this.setTooltip("複数の条件分け");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -142,7 +146,7 @@ Blockly.Blocks['func'] = {
     this.setNextStatement(true, null);
     this.setColour(290);
     this.setTooltip("関数の宣言");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -166,7 +170,7 @@ Blockly.Blocks['const'] = {
     this.setNextStatement(true, null);
     this.setColour(120);
     this.setTooltip("const の宣言");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -189,7 +193,7 @@ Blockly.Blocks['let'] = {
     this.setNextStatement(true, null);
     this.setColour(120);
     this.setTooltip("変数の宣言");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -209,7 +213,7 @@ Blockly.Blocks['statement'] = {
     this.setNextStatement(true, null);
     this.setColour(120);
     this.setTooltip("すきな１行分のプログラム");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -243,7 +247,7 @@ Blockly.Blocks['turtle'] = {
     this.setNextStatement(true, null);
     this.setColour(120);
     this.setTooltip("タートルへ命令する");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -265,7 +269,7 @@ Blockly.Blocks['log'] = {
     this.setNextStatement(true, null);
     this.setColour(120);
     this.setTooltip("値の表示");
-    this.setHelpUrl("");
+    this.setHelpUrl(helppage);
   }
 };
 
@@ -274,3 +278,5 @@ Blockly.JavaScript['log'] = function(block) {
   const code = `console.log(${value})\n`;
   return code;
 };
+
+})();
