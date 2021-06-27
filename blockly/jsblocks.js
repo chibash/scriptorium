@@ -4,6 +4,11 @@
 
 const helppage = './help.html'
 
+const loopColor = 210
+const condColor = 230
+const funcColor = 20
+const baseColor = 120
+
 Blockly.Blocks['for_of'] = {
   init: function() {
     this.appendDummyInput()
@@ -19,7 +24,7 @@ Blockly.Blocks['for_of'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(loopColor);
     this.setTooltip("繰り返し");
     this.setHelpUrl(helppage);
   }
@@ -43,14 +48,14 @@ Blockly.Blocks['if'] = {
         .setCheck(null);
     this.appendDummyInput()
         .appendField("} else {");
-    this.appendStatementInput("NAME")
+    this.appendStatementInput("else")
         .setCheck(null);
     this.appendDummyInput()
         .appendField("}");
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(condColor);
     this.setTooltip("条件分け");
     this.setHelpUrl(helppage);
   }
@@ -77,7 +82,7 @@ Blockly.Blocks['ifthen'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(condColor);
     this.setTooltip("条件つき実行");
     this.setHelpUrl(helppage);
   }
@@ -113,7 +118,7 @@ Blockly.Blocks['ifelse2'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(condColor);
     this.setTooltip("複数の条件分け");
     this.setHelpUrl(helppage);
   }
@@ -144,7 +149,7 @@ Blockly.Blocks['func'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(290);
+    this.setColour(funcColor);
     this.setTooltip("関数の宣言");
     this.setHelpUrl(helppage);
   }
@@ -168,7 +173,7 @@ Blockly.Blocks['const'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(120);
+    this.setColour(baseColor);
     this.setTooltip("const の宣言");
     this.setHelpUrl(helppage);
   }
@@ -191,7 +196,7 @@ Blockly.Blocks['let'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(120);
+    this.setColour(baseColor);
     this.setTooltip("変数の宣言");
     this.setHelpUrl(helppage);
   }
@@ -211,7 +216,7 @@ Blockly.Blocks['statement'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(120);
+    this.setColour(baseColor);
     this.setTooltip("すきな１行分のプログラム");
     this.setHelpUrl(helppage);
   }
@@ -220,6 +225,27 @@ Blockly.Blocks['statement'] = {
 Blockly.JavaScript['statement'] = function(block) {
   const prog = block.getFieldValue('code');
   const code = `${prog}\n`;
+  return code;
+};
+
+Blockly.Blocks['log'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("console.log(")
+        .appendField(new Blockly.FieldTextInput("0"), "value")
+        .appendField(")");
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(baseColor);
+    this.setTooltip("値の表示");
+    this.setHelpUrl(helppage);
+  }
+};
+
+Blockly.JavaScript['log'] = function(block) {
+  const value = block.getFieldValue('value');
+  const code = `console.log(${value})\n`;
   return code;
 };
 
@@ -245,7 +271,7 @@ Blockly.Blocks['turtle'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(120);
+    this.setColour(baseColor);
     this.setTooltip("タートルへ命令する");
     this.setHelpUrl(helppage);
   }
@@ -258,24 +284,45 @@ Blockly.JavaScript['turtle'] = function(block) {
   return code;
 };
 
-Blockly.Blocks['log'] = {
+Blockly.Blocks['pro'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("console.log(")
-        .appendField(new Blockly.FieldTextInput("0"), "value")
+        .appendField("pro.")
+          .appendField(new Blockly.FieldDropdown([
+              ['start', 'start'],
+              ['arc', 'arc'],
+              ['background', 'background'],
+              ['beep', 'beep'],
+              ['circle', 'circle'],
+              ['color', 'color'],
+              ['crossing', 'crossing'],
+              ['elipse', 'elipse'],
+              ['fill', 'fill'],
+              ['frameRate', 'frameRate'],
+              ['line', 'line'],
+              ['noFill', 'noFill'],
+              ['rect', 'rect'],
+              ['stroke', 'stroke'],
+              ['stop', 'stop'],
+              ['text', 'text'],
+              ['textFont', 'textFont']
+          ]), "name")
+        .appendField("(")
+        .appendField(new Blockly.FieldTextInput(""), "args")
         .appendField(")");
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(120);
-    this.setTooltip("値の表示");
+    this.setColour(baseColor);
+    this.setTooltip("Processing 風プログラミング");
     this.setHelpUrl(helppage);
   }
 };
 
-Blockly.JavaScript['log'] = function(block) {
-  const value = block.getFieldValue('value');
-  const code = `console.log(${value})\n`;
+Blockly.JavaScript['pro'] = function(block) {
+  const name = block.getFieldValue('name');
+  const args = block.getFieldValue('args');
+  const code = `pro.${name}(${args})\n`;
   return code;
 };
 
