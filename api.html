@@ -1,0 +1,248 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=0.52">
+  <title>Scriptorium の使い方 (API)</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
+  <link rel="manifest" href="/icon/site.webmanifest">
+  <link rel="mask-icon" href="/icon/safari-pinned-tab.svg" color="#8A8DA7">
+  <meta name="msapplication-config" content="/icon/browserconfig.xml">
+  <meta name="msapplication-TileColor" content="#3f51b5">
+  <meta name="theme-color" content="#3f51b5">
+
+  <link rel="stylesheet" href="scriptorium.css">
+</head>
+<body>
+  <header>
+    <br>
+    <nav id="nav">
+      <ul>
+        <li><a href="./help.html">戻る</a></li>
+      </ul>
+    </nav>
+    
+    <div id="hmenu" onclick="toggleMenu()">
+      <span class="hmenu_inner_line hmenu_inner_1" id="line1"></span>
+      <span class="hmenu_inner_line hmenu_inner_2" id="line2"></span>
+      <span class="hmenu_inner_line hmenu_inner_3" id="line3"></span>
+    </div>
+    <span id="logo">Scriptorium</span>
+    <a id="logo-info" href="./help.html">使い方</a>
+    <a id="logo-info" href="https://scriptorium.chibas.net">scriptorium.chibas.net</a>
+  </header>
+
+  <div class="helpdoc body-font" onclick="closeMenu()">
+
+  <p><br></p>
+  <p>Scriptorium（スクリプトリアム）の中では以下の関数（メソッド）やプロパティが利用可能です。
+  </p>
+
+  <h1>タートルグラフィックス</h1>
+
+  <ul>
+    <li><code>turtle.color(c)</code></li>
+    <p>線の色を変える。 <code>c</code> は
+      <code>black</code>, <code>white</code>, <code>red</code>,
+      <code>green</code>, <code>blue</code> のいずれか。
+      あるいは CSS で定められた色を表す文字列。
+      例えば <code>turtle.color('#FFA500')</code> は線の色をオレンジに変える。
+    </p>
+
+    <li><code>turtle.down()</code></li>
+    <p>ペンを下げて線を描き始める</p>
+
+    <li><code>turtle.forward(len)</code></li>
+    <p>亀を前に進める。移動距離は <code>len</code>。</p>
+
+    <li><code>turtle.image(c)</code></li>
+    <p>亀の絵を変える。
+      <code>c</code> は引用符 <code>'</code> で囲んだ一文字。
+      例えば <code>turtle.image('🐱')</code> を呼び出すと亀の絵が 🐱 に変わる。
+      ここで 🐱 は絵文字。
+    </p>
+
+    <li><code>turtle.left(r)</code>
+    <p>亀の向きを左へ回転させる。回転角度は <code>r</code>。</p>
+
+    <li><code>turtle.move(x, y)</code></li>
+    <p>亀の位置を移動。座標 (<code>x</code>, <code>y</code>) へ移動する。</p>
+
+    <li><code>turtle.right(r)</code></li>
+    <p>亀の向きを右へ回転させる。回転角度は <code>r</code> 度。</p>
+
+    <li><code>turtle.speed(s)</code></li>
+    <p>亀の速度を変える。<code>s</code> は変更後の速度（初期値は 1）。</p>
+
+    <li><code>turtle.up()</code></li>
+    <p>ペンを上げて線を描き終える。</p>
+
+    <li><code>turtle.width(w)</code></li>
+    <p>線の太さを変える。<code>w</code> は変更後の線の太さ（初期値は 1）。</p>
+  </ul>
+
+  <h1>Processing 風プログラミング</h1>
+
+  <p><a href="https://processing.org">Processing 言語</a>風のプログラミングを可能にする関数（メソッド）群です。
+  次のような関数を宣言して使うのが基本です。
+  </p>
+
+  <ul>
+  <li><code>draw()</code></li> 
+  <p>描画する。
+  </p> 
+
+  <li><code>mouseClicked()</code></li> 
+  <p>画面をクリックしたときの処理を実行する。
+  </p> 
+
+  <li><code>keyPressed()</code></li> 
+  <p>キーが押されたときの処理を実行する。
+  </p> 
+
+  <li><code>pro.start()</code></li> 
+  <p> 描画を開始する。
+  </p> 
+  </ul>
+
+  <p>基本となるプログラムの形は例えば次のようなものです。
+<blockquote>
+<pre>function draw() {
+  pro.background(white)
+  pro.rect((pro.frameCount % 40) * 10, 50, 100, 50)
+}
+
+pro.start()</pre></blockquote>
+このプログラムは <code>draw</code> 関数を宣言して <code>pro.start</code>
+を呼び出します。
+実行すると長方形が画面を左から右へ動く動画が表示されます。
+  </p>
+  
+  <h3>関数（メソッド）</h3>
+
+  <ul>
+  <li><code>pro.stop()</code></li> 
+  <p>描画を終了する。
+  </p> 
+
+  <li><code>pro.frameRate(r)</code></li> 
+  <p>毎秒のフレーム数を <code>r</code> に変える。
+  </p> 
+
+  <li><code>pro.background(c)</code></li> 
+  <p>背景を <code>c</code> の色で塗りつぶす。
+  <code>c</code> の値は <code>turtle.color</code> の引数と同様。
+  </p> 
+
+  <li><code>pro.line(x1, y1, x2, y2)</code></li> 
+  <p>座標 (<code>x1</code>, <code>y1</code>) - (<code>x2</code>,
+    <code>y2</code>) の間に線を引く。
+  </p> 
+
+  <li><code>pro.rect(x, y, w, h)</code></li> 
+  <p>座標 (<code>x</code>, <code>y</code>) を左上すみとして幅
+    <code>w</code>、高さ <code>h</code> の長方形を描く。
+  </p> 
+
+  <li><code>pro.circle(x, y, r)</code></li> 
+  <p>座標 (<code>x</code>, <code>y</code>) を中心に半径 <code>r</code>
+    の円を描く。
+  </p> 
+
+  <li><code>pro.text(t, x, y)</code></li> 
+  <p>文字列 <code>t</code> を座標 (<code>x</code>, <code>y</code>) に描く。
+  </p> 
+
+  <li><code>pro.stroke(c)</code></li> 
+  <p>線の色を <code>c</code> に変える。
+  </p> 
+
+  <li><code>pro.noStroke()</code></li> 
+  <p>線の色を透明（無色）に変える。
+  </p>
+
+  <li><code>pro.fill(c)</code></li> 
+  <p>塗りつぶし色を <code>c</code> に変える。
+  </p>
+
+  <li><code>pro.noFill()</code></li> 
+  <p>塗りつぶし色を透明（無色）に変える。
+  </p> 
+
+  <li><code>pro.textFont(f)</code></li> 
+  <p>フォントを <code>f</code> に変える。例えば
+    <blockquote><pre>pro.textFont('48px sans-serif')</pre></blockquote>
+    と呼び出すと、48 ピクセルの大きさの sans-serif 体にフォントが変わる。
+  </p> 
+
+  <li><code>pro.color(r, g, b)</code></li> 
+  <p>引数に対応する色を戻り値として返す。
+  </p>
+
+  <li><code>pro.beep(f)</code></li> 
+  <p><code>f</code> Hz のビープ音を鳴らす。引数がない場合は 440 Hz で鳴らす。
+  <code>f</code> が大きい値になるとより高い音になる。
+  </p>
+  </ul>
+
+  <h3>プロパティ</h3>
+  <ul>
+  <li><code>pro.frameCount</code></li> 
+  <p>今、何回目の <code>draw</code> の呼び出しかを表す数。
+  </p> 
+
+  <li><code>pro.width</code></li>
+  <p>絵が描かれるペイン（四角い枠の区画）の幅。
+  </p> 
+
+  <li><code>pro.height</code></li> 
+  <p>絵が描かれるペイン（四角い枠の区画）の高さ。
+  </p> 
+
+  <li><code>pro.mouseX</code></li> 
+  <p>画面上のポインタの <code>x</code> 座標
+  </p> 
+
+  <li><code>pro.mouseY</code></li> 
+  <p>画面上のポインタの <code>y</code> 座標。
+  </p> 
+
+  <li><code>pro.key</code></li> 
+  <p>最後に押されたキーの種類を表す文字列。
+  </p>
+  </ul>
+
+  <h1>その他</h1>
+
+  <ul>
+    <li><code>console.log(m)</code></li>
+    <p><code>m</code> の値をページ上に表示する。
+      引数が複数ある場合は複数の値を表示する。<br>
+      （本来の <code>console.log</code> と異なりコンソールには出力しない。）
+    </p>
+  </ul>
+
+<footer class="body-font">
+  Copyright (C) 2019-2021 Shigeru Chiba.
+  <br>
+  <br>
+  <button class="btn-normal" onclick="document.location.href='./help.html'">戻る</button>
+  <button class="btn-smallscreen" onclick="document.location.href='./help.html'">戻る</button>
+</footer>
+
+<script>
+function toggleMenu() {
+  document.getElementById('nav').classList.toggle('in')
+  document.getElementById('hmenu').classList.toggle('in')
+}
+
+function closeMenu() {
+    document.getElementById('nav').classList.remove('in')
+    document.getElementById('hmenu').classList.remove('in')
+}
+</script>
+</body>
+</html>
+
