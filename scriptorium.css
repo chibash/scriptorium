@@ -29,7 +29,7 @@ header {
     color: white;
 }
 
-#logo-info {
+.logo-info {
     font-family: 'Arial', sans-serif;
     font-size: 13px;
     float: right;
@@ -39,16 +39,16 @@ header {
     text-decoration: none;
 }
 
-a#logo-info:link {
+a.logo-info:link {
     color: white;
     text-decoration: none;
 }
 
-a#logo-info:hover {
+a.logo-info:hover {
     text-decoration: underline;
 }
 
-a#logo-info:visited {
+a.logo-info:visited {
     color: #d0d0d0;
     text-decoration: none;
 }
