@@ -137,6 +137,8 @@ a.logo-info:visited {
     padding-right: 1px;
     padding-top: 5px;
     padding-bottom: 11px;
+    width: 250px;
+    margin: 2px;
 }
 
 #nav input:focus {
