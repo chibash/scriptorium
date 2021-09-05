@@ -134,7 +134,9 @@ a.logo-info:visited {
     background: #3F51B5;
     border: 0;
     padding-left: 15px;
-    padding-bottom: 15px;
+    padding-right: 1px;
+    padding-top: 5px;
+    padding-bottom: 11px;
 }
 
 #nav input:focus {
